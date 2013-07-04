@@ -1,6 +1,8 @@
 package Velociraptero::Example;
 use Mojo::Base 'Mojolicious::Controller';
 
+use Biblio::Zotero::DB;
+
 # This action will render a template
 sub welcome {
   my $self = shift;
