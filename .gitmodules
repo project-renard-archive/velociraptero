@@ -1,0 +1,3 @@
+[submodule "external/pdf.js"]
+	path = external/pdf.js
+	url = https://github.com/mozilla/pdf.js.git
