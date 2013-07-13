@@ -1,4 +1,4 @@
-package Velociraptero::Example;
+package Velociraptero::Controller::Root;
 use Mojo::Base 'Mojolicious::Controller';
 
 use Biblio::Zotero::DB;
