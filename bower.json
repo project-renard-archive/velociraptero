@@ -1,0 +1,12 @@
+{
+  "name": "velociraptero",
+  "version": "0.0.0",
+  "main": "public/script/app.coffee",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
