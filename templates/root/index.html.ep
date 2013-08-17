@@ -1,0 +1,24 @@
+% layout 'default';
+% title 'Velociraptero';
+
+<div id="items">
+<ul id="item-list"></ul>
+</div>
+
+<script id="item-template" type="text/template">
+  <div class="item">
+    <div class="cover"><img class="cover" src="{{ cover }}"/></div>
+    <div class="title">{{ title }}</div>
+    <div class="author">{{ author }}</div>
+    <div class="date">{{ date }}</div>
+  </div>
+</script>
+%= javascript begin
+  var require = {
+    config: {
+      "cs!app/app": <%== param 'app_config' %>
+    }
+  };
+% end
+
+<script data-main="<%= url_for '/script/setup.js' %>" src="<%= url_for '/vendor/requirejs/require.js' %>"></script>

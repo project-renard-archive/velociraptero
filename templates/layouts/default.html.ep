@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html>
-  <head><title><%= title %></title></head>
+  <head>
+    <title><%= title %></title>
+    %= stylesheet '/css/style.css'
+    %= stylesheet '/vendor/bootstrap/bootstrap.css'
+    %= javascript '/vendor/bootstrap/bootstrap.js'
+  </head>
   <body><%= content %></body>
 </html>

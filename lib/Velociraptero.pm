@@ -14,7 +14,7 @@ sub startup {
   my $r = $self->routes;
   $r->namespaces(['Velociraptero::Controller']);
 
-  # Normal route to controller
+  $r->get('/')->to('root#index');
   $r->get('/items')->to('root#items');
 }
 

@@ -4,15 +4,18 @@ use Mojo::Base 'Mojolicious::Controller';
 use Biblio::Zotero::DB;
 use strict;
 use utf8::all;
+use Mojo::JSON 'j';
+use Try::Tiny;
 
 # This action will render a template
-sub welcome {
+sub index {
 	my $self = shift;
 
-	# Render template "example/welcome.html.ep" with message
-	$self->render(
-		message => 'Welcome to the Mojolicious real-time web framework!'
-	);
+	$self->param( app_config => j({
+		url => $self->url_for( '/items' ),
+	}) ); # JSON
+
+	$self->render();
 }
 
 sub items {
