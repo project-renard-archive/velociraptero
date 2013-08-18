@@ -36,6 +36,7 @@ sub zotero_item_toJSON {
 
 	my $data = {};
 
+	$data->{id} = $zotero_item->itemid;
 	$data->{title} = $fields->{title} if exists $fields->{title};
 	$data->{date} = ( $fields->{date} =~ /^(\d+)/ )[0] if exists $fields->{date};
 	$data->{author} = $authors;
