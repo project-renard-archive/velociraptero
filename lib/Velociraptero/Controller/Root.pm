@@ -25,7 +25,7 @@ sub items {
 
 sub zotero_documents {
 	my ($self) = @_;
-	[map { $self->zotero_item_toJSON($_) } $self->zotero->library->items->page(0)->all];
+	[map { $self->zotero_item_toJSON($_) } $self->zotero->library->items->page(1)->all];
 }
 
 sub zotero_item_toJSON {
