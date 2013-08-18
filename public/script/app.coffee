@@ -1,8 +1,10 @@
 # this needs to be done first before any templates are evaluated
 require ["underscore"], (_) ->
   # use {{ template delimiters }}
-  _.templateSettings.interpolate = /\{\{(.+?)\}\}/g
-  _.templateSettings.escape = /\{\{-(.*?)\}\}/g
+  _.templateSettings  =
+    evaluate    : /\{{([\s\S]+?)\}\}/g
+    interpolate : /\{\{=([\s\S]+?)\}\}/g
+    escape      : /\{\{-([\s\S]+?)\}\}/g
 
 define ["backbone"
   "cs!app/view/itembagview",

@@ -7,10 +7,14 @@
 
 <script id="item-template" type="text/template">
   <div class="item">
-    <div class="cover"><img class="cover" src="{{ cover }}"/></div>
-    <div class="title">{{ title }}</div>
-    <div class="author">{{ author }}</div>
-    <div class="date">{{ date }}</div>
+    <div class="cover"><img class="cover" src="{{- typeof(cover) !== 'undefined' && cover ? cover : "<%= url_for('/img/book-150px.png') %>" }}"/></div>
+    <div class="title">{{- title }}</div>
+    {{ if (  typeof(author) !== 'undefined' && author ) { }}
+    <div class="author">{{- author.join("; ") }}</div>
+    {{ } }}
+    {{ if ( typeof(date) !== 'undefined' && date ) { }}
+    <div class="author">{{- date }}</div>
+    {{ } }}
   </div>
 </script>
 %= javascript begin

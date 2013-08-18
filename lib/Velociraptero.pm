@@ -8,7 +8,10 @@ sub startup {
   my $self = shift;
 
   my $config = $self->plugin('Config');
-  use DDP; p $config;
+
+  $self->helper(zotero => sub {
+  	$self->config->{zotero_db};
+  });
 
   # Router
   my $r = $self->routes;

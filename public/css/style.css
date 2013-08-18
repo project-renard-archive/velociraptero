@@ -1,0 +1,8 @@
+#items { float: left; width: 25% }
+#item-list { list-style-type: none; padding: 0; margin: none }
+
+.cover { width: 150px }
+
+.title { font-weight: bold; font-size: 110% }
+.author { font-style: italic; font-size: 100% }
+.date { font-size: 90% }
