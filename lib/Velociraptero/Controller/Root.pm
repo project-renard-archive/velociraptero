@@ -43,7 +43,7 @@ sub zotero_item_toJSON {
 			}
 		}
 		map { $_->creatorid->creatordataid }
-		$zotero_item->item_creators->all ];
+		$zotero_item->item_creators->search({}, { order_by => 'orderindex' } )->all ];
 
 	my $data = {};
 
