@@ -5,20 +5,20 @@ use strict;
 
 # This method will run once at server start
 sub startup {
-  my $self = shift;
+	my $self = shift;
 
-  my $config = $self->plugin('Config');
+	my $config = $self->plugin('Config');
 
-  $self->helper(zotero => sub {
-  	$self->config->{zotero_db};
-  });
+	$self->helper(zotero => sub {
+		$self->config->{zotero_db};
+	});
 
   # Router
-  my $r = $self->routes;
-  $r->namespaces(['Velociraptero::Controller']);
+	my $r = $self->routes;
+	$r->namespaces(['Velociraptero::Controller']);
 
-  $r->get('/')->to('root#index');
-  $r->get('/items')->to('root#items');
+	$r->get('/')->to('root#index');
+	$r->get('/items')->to('root#items');
 }
 
 1;
