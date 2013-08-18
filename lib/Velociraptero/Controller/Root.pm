@@ -32,18 +32,7 @@ sub zotero_item_toJSON {
 	my ($self, $zotero_item) = @_;
 	my $fields = $zotero_item->fields;
 
-	my $authors = [
-		map {
-			if ( $_->lastname and $_->firstname ) { # TODO, perhaps do this client-side?
-				"@{[$_->lastname]}, @{[$_->firstname]}"
-			} elsif( $_->lastname ) {
-			"@{[$_->lastname]}"
-			} else {
-			"@{[$_->firstname]}"
-			}
-		}
-		map { $_->creatorid->creatordataid }
-		$zotero_item->item_creators->search({}, { order_by => 'orderindex' } )->all ];
+	my $authors = $self->zotero_item_get_authors($zotero_item);
 
 	my $data = {};
 
@@ -52,6 +41,21 @@ sub zotero_item_toJSON {
 	$data->{author} = $authors;
 
 	$data;
+}
+
+sub zotero_item_get_authors {
+	my ($self, $zotero_item) = @_;
+	[ map {
+			if ( $_->lastname and $_->firstname ) { # TODO, perhaps do this client-side?
+				"@{[$_->lastname]}, @{[$_->firstname]}"
+			} elsif( $_->lastname ) {
+			"@{[$_->lastname]}"
+			} else {
+			"@{[$_->firstname]}"
+			}
+		}
+		map { $_->creatorid->creatordataid } # TODO separate by creatortypeid and put as a convenience method in 
+		$zotero_item->item_creators->search({}, { order_by => 'orderindex' } )->all ];
 }
 
 sub documents {
