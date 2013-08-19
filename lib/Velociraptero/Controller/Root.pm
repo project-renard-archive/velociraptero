@@ -25,7 +25,10 @@ sub items {
 
 sub zotero_documents {
 	my ($self) = @_;
-	[map { $self->zotero_item_toJSON($_) } $self->zotero->library->items->page(1)->all];
+	[map { $self->zotero_item_toJSON($_) } $self->zotero->library
+		->items
+		->with_item_attachment_resultset('StoredItemAttachment')
+		->items_with_pdf_attachments->page(1)->all];
 }
 
 sub zotero_item_toJSON {
