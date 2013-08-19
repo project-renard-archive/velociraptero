@@ -42,7 +42,7 @@ sub item_attachments {
 		map { $self->url_for(
 			'/item/'. $_->{itemid} .
 			'/attachment/' . $_->{attachment_itemid} .
-			'/' . uri_escape($_->{name}) )
+			'/' . $_->{name} )
 		} @attachment_info ] );
 }
 
@@ -53,7 +53,7 @@ sub item_attachment_info {
 			? $item_attachment->get_column('sourceitemid')
 			: $item_attachment->get_column('itemid') ),
 		attachment_itemid => $item_attachment->get_column('itemid'),
-		name => file( $item_attachment->get_column('path') =~ s/^storage://r )->basename, # path column may be in the form "storage:filename"
+		name => ($item_attachment->uri->path_segments)[-1],
 	};
 }
 
