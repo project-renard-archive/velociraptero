@@ -1,13 +1,22 @@
 % layout 'default';
 % title 'Velociraptero';
 
-<div id="items">
-<ul id="item-list"></ul>
+<div id="items" class="nav">
+<ul id="item-list" class="nav nav-pills"></ul>
+</div>
+
+<div id="doc">
 </div>
 
 <script id="item-template" type="text/template">
-  <div class="item">
-    <div class="cover"><img class="cover" src="{{- typeof(cover) !== 'undefined' && cover ? cover : "<%= url_for('/img/book-150px.png') %>" }}"/></div>
+  <a class="item" href="{{- item_attachment_url }}">
+    <div class="cover">
+      {{ if (  typeof(cover) !== 'undefined' && cover ) { }}
+      <img class="cover" src="{{-  cover }}"/>
+      {{ } else { }}
+      <i class="icon icon-4x icon-book"></i>
+      {{ } }}
+    </div>
     <div class="title">{{- title }}</div>
     {{ if (  typeof(author) !== 'undefined' && author ) { }}
     <div class="author">{{- author.join("; ") }}</div>
@@ -15,7 +24,7 @@
     {{ if ( typeof(date) !== 'undefined' && date ) { }}
     <div class="author">{{- date }}</div>
     {{ } }}
-  </div>
+  </a>
 </script>
 %= javascript begin
   var require = {
