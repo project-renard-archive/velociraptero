@@ -1,5 +1,6 @@
 package Velociraptero;
 use Mojo::Base 'Mojolicious';
+use Mojolicious::Plugin::RenderFile;
 
 use strict;
 
@@ -8,6 +9,7 @@ sub startup {
 	my $self = shift;
 
 	my $config = $self->plugin('Config');
+	$self->plugin('RenderFile');
 
 	$self->helper(zotero => sub {
 		$self->config->{zotero_db};
@@ -20,6 +22,8 @@ sub startup {
 	$r->get('/')->to('root#index');
 	$r->get('/items')->to('root#items');
 	$r->get('/item/:itemid/attachments')->to('root#item_attachments');
+	$r->get('/item/:itemid/attachment/:itemattachmentid')->to('root#item_attachment_file');
+	$r->get('/item/:itemid/attachment/:itemattachmentid/#name')->to('root#item_attachment_file');
 }
 
 1;

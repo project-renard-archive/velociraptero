@@ -7,6 +7,7 @@ use utf8::all;
 use Mojo::JSON 'j';
 use Try::Tiny;
 use Path::Class;
+use Path::Class::URI;
 use URI::Escape;
 
 use constant MIMETYPE_PDF => 'application/pdf';
@@ -74,10 +75,17 @@ sub get_pdf_attachments {
 	\@attachments;
 }
 
-# GET /item/:itemid/attachment/:itemattachmentid/:name
+# GET /item/:itemid/attachment/:itemattachmentid/#name
 sub item_attachment_file {
-	# TODO
 	my $self = shift;
+
+	my $attachment_id = $self->param('itemattachmentid');
+	my $item_attachment = $self->zotero->schema->resultset('ItemAttachment')->find( $attachment_id  );
+
+	# TODO only if the scheme is file:
+	my $filepath = file_from_uri($item_attachment->uri);
+	$self->render_file( filepath => $filepath,
+		format => $self->app->types->detect( $item_attachment->mimetype ) );
 }
 
 sub zotero_documents {
