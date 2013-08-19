@@ -1,1 +1,4 @@
 bower-installer
+mv public/vendor/zmughal-build-pdf.js/zmughal-build-pdf.js/vendor/{build,web} public/vendor/zmughal-build-pdf.js
+rm -Rf public/vendor/zmughal-build-pdf.js/zmughal-build-pdf.js
+perl -pi -e "s,url\('../font/,url(',g" public/vendor/font-awesome/font-awesome.css

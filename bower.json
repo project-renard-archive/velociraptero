@@ -16,7 +16,8 @@
     "underscore": "~1.5.1",
     "require-cs": "~0.4.4",
     "requirejs": "~2.1.8",
-    "bootstrap": "~3.0.0-rc1"
+    "bootstrap": "~3.0.0-rc.2",
+    "font-awesome": "~3.2.1"
   },
   "install": {
     "path": "public/vendor",
@@ -24,6 +25,13 @@
       "bootstrap": [
         "bower_components/bootstrap/dist/js/bootstrap.js",
         "bower_components/bootstrap/dist/css/bootstrap.css"
+      ],
+      "font-awesome": [
+        "bower_components/font-awesome/css/font-awesome.css",
+        "bower_components/font-awesome/font/fontawesome-webfont.eot",
+        "bower_components/font-awesome/font/fontawesome-webfont.svg",
+        "bower_components/font-awesome/font/fontawesome-webfont.ttf",
+        "bower_components/font-awesome/font/fontawesome-webfont.woff"
       ]
     }
   }
