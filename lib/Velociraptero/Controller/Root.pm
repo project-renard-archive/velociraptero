@@ -32,11 +32,37 @@ sub items {
 # only gets the ones that are application/pdf
 sub item_attachments {
 	my ($self) = @_;
-	my $item = $self->zotero->schema->resultset('StoredItem')->find( $self->param('itemid') );
+
+	my @attachment_info = map {
+		$self->item_attachment_info($_)
+	} @{ $self->get_pdf_attachments( $self->param('itemid') ) };
+
+	$self->render( json => [
+		map { $self->url_for(
+			'/item/'. $_->{itemid} .
+			'/attachment/' . $_->{attachment_itemid} .
+			'/' . uri_escape($_->{name}) )
+		} @attachment_info ] );
+}
+
+sub item_attachment_info {
+	my ($self, $item_attachment) = @_;
+	{
+		itemid => ( defined $item_attachment->sourceitemid
+			? $item_attachment->get_column('sourceitemid')
+			: $item_attachment->get_column('itemid') ),
+		attachment_itemid => $item_attachment->get_column('itemid'),
+		name => file( $item_attachment->get_column('path') =~ s/^storage://r )->basename, # path column may be in the form "storage:filename"
+	};
+}
+
+sub get_pdf_attachments {
+	my ($self, $itemid) = @_;
+	my $item = $self->zotero->schema->resultset('StoredItem')->find( $itemid  );
 
 	my @attachments;
 
-	return $self->render( json => [] ) unless $item;
+	return [] unless $item;
 
 	if( $item->is_attachment ) {
 		my $item_attachment = $item->item_attachments_itemid;
@@ -45,19 +71,7 @@ sub item_attachments {
 		@attachments = $item->stored_item_attachments_sourceitemids
 			->search( { mimetype => MIMETYPE_PDF } )->all ;
 	}
-	my @attachment_info = map {
-		{
-			itemid => ( defined $_->sourceitemid ? $_->get_column('sourceitemid') : $_->get_column('itemid') ),
-			attachment_itemid => $_->get_column('itemid'),
-			name => file( $_->get_column('path') =~ s/^storage://r )->basename, # path column may be in the form "storage:filename"
-		}
-	} @attachments;
-	$self->render( json => [
-		map { $self->url_for(
-			'/item/'. $_->{itemid} .
-			'/attachment/' . $_->{attachment_itemid} .
-			'/' . uri_escape($_->{name}) )
-		} @attachment_info ] );
+	\@attachments;
 }
 
 # GET /item/:itemid/attachment/:itemattachmentid/:name
