@@ -90,13 +90,13 @@ sub item_attachment_file {
 
 sub zotero_documents {
 	my ($self) = @_;
-	[map { $self->zotero_item_toJSON($_) } $self->zotero->library
+	[map { $self->zotero_item_TO_JSON($_) } $self->zotero->library
 		->items
 		->with_item_attachment_resultset('StoredItemAttachment')
 		->items_with_pdf_attachments->page(1)->all];
 }
 
-sub zotero_item_toJSON {
+sub zotero_item_TO_JSON {
 	my ($self, $zotero_item) = @_;
 	my $fields = $zotero_item->fields;
 
