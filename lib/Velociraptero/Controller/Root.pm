@@ -6,8 +6,12 @@ use strict;
 use utf8::all;
 use Mojo::JSON 'j';
 use Try::Tiny;
+use Path::Class;
+use URI::Escape;
 
-# This action will render a template
+use constant MIMETYPE_PDF => 'application/pdf';
+
+# GET /
 sub index {
 	my $self = shift;
 
@@ -18,9 +22,48 @@ sub index {
 	$self->render();
 }
 
+# GET /items
 sub items {
 	my ($self) = @_;
 	return $self->documents();
+}
+
+# GET /item/:itemid/attachments
+# only gets the ones that are application/pdf
+sub item_attachments {
+	my ($self) = @_;
+	my $item = $self->zotero->schema->resultset('StoredItem')->find( $self->param('itemid') );
+
+	my @attachments;
+
+	return $self->render( json => [] ) unless $item;
+
+	if( $item->is_attachment ) {
+		my $item_attachment = $item->item_attachments_itemid;
+		@attachments = ( $item_attachment ) if $item_attachment->mimetype eq MIMETYPE_PDF;
+	} else {
+		@attachments = $item->stored_item_attachments_sourceitemids
+			->search( { mimetype => MIMETYPE_PDF } )->all ;
+	}
+	my @attachment_info = map {
+		{
+			itemid => ( defined $_->sourceitemid ? $_->get_column('sourceitemid') : $_->get_column('itemid') ),
+			attachment_itemid => $_->get_column('itemid'),
+			name => file( $_->get_column('path') =~ s/^storage://r )->basename, # path column may be in the form "storage:filename"
+		}
+	} @attachments;
+	$self->render( json => [
+		map { $self->url_for(
+			'/item/'. $_->{itemid} .
+			'/attachment/' . $_->{attachment_itemid} .
+			'/' . uri_escape($_->{name}) )
+		} @attachment_info ] );
+}
+
+# GET /item/:itemid/attachment/:itemattachmentid/:name
+sub item_attachment_file {
+	# TODO
+	my $self = shift;
 }
 
 sub zotero_documents {
@@ -44,6 +87,8 @@ sub zotero_item_toJSON {
 	$data->{date} = ( $fields->{date} =~ /^(\d+)/ )[0] if exists $fields->{date};
 	$data->{author} = $authors;
 
+	$data->{attachments_url} = $self->url_for( '/item/' . $zotero_item->itemid . '/attachments' );
+
 	$data;
 }
 
@@ -58,7 +103,7 @@ sub zotero_item_get_authors {
 			"@{[$_->firstname]}"
 			}
 		}
-		map { $_->creatorid->creatordataid } # TODO separate by creatortypeid and put as a convenience method in 
+		map { $_->creatorid->creatordataid } # TODO separate by creatortypeid and put as a convenience method in
 		$zotero_item->item_creators->search({}, { order_by => 'orderindex' } )->all ];
 }
 

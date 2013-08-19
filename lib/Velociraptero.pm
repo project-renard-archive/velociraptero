@@ -19,6 +19,7 @@ sub startup {
 
 	$r->get('/')->to('root#index');
 	$r->get('/items')->to('root#items');
+	$r->get('/item/:itemid/attachments')->to('root#item_attachments');
 }
 
 1;
