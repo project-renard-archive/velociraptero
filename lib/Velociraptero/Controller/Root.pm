@@ -17,19 +17,28 @@ sub index {
 	my $self = shift;
 
 	$self->param( app_config => j({
-		url => $self->url_for( '/item' ),
+		url => $self->url_for( '/api/item' ),
+    push_state => $self->flash('push_state')
 	}) ); # JSON
 
 	$self->render();
 }
 
-# GET /item
+# GET /*wildcard
+sub wildcard {
+	my $self = shift;
+  $self->flash( push_state => $self->param('wildcard') );
+  $self->redirect_to( '/' );
+}
+
+
+# GET /api/item
 sub items {
 	my ($self) = @_;
 	return $self->documents();
 }
 
-# GET /item/:itemid/attachment
+# GET /api/item/:itemid/attachment
 # return JSON of attachments
 # only gets the ones that are application/pdf
 sub item_attachments {
@@ -40,10 +49,15 @@ sub item_attachments {
 	} @{ $self->get_pdf_attachments( $self->param('itemid') ) };
 
 	$self->render( json => [
-		map { $self->url_for(
-			'/item/'. $_->{itemid} .
-			'/attachment/' . $_->{attachment_itemid} .
-			'/' . $_->{name} )
+		map {
+			{
+				id => $_->{attachment_itemid},
+				itemid => $_->{itemid},
+				item_attachment_url => $self->url_for(
+					'/api/item/'. $_->{itemid} .
+					'/attachment/' . $_->{attachment_itemid} .
+					'/' . $_->{name} )
+			}
 		} @attachment_info ] );
 }
 
@@ -76,7 +90,7 @@ sub get_pdf_attachments {
 	\@attachments;
 }
 
-# GET /item/:itemid/attachment/:itemattachmentid/#name
+# GET /api/item/:itemid/attachment/:itemattachmentid/#name
 sub item_attachment_file {
 	my $self = shift;
 
@@ -110,7 +124,7 @@ sub zotero_item_TO_JSON {
 	$data->{date} = ( $fields->{date} =~ /^(\d+)/ )[0] if exists $fields->{date};
 	$data->{author} = $authors;
 
-	$data->{attachments_url} = $self->url_for( '/item/' . $zotero_item->itemid . '/attachment' );
+	$data->{attachments_url} = $self->url_for( '/api/item/' . $zotero_item->itemid . '/attachment' );
 
 	$data;
 }

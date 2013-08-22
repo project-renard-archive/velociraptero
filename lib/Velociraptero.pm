@@ -19,11 +19,14 @@ sub startup {
 	my $r = $self->routes;
 	$r->namespaces(['Velociraptero::Controller']);
 
+	$r->get('/api/item')->to('root#items');
+	$r->get('/api/item/:itemid/attachment')->to('root#item_attachments');
+	$r->get('/api/item/:itemid/attachment/:itemattachmentid')->to('root#item_attachment_file');
+	$r->get('/api/item/:itemid/attachment/:itemattachmentid/#name')->to('root#item_attachment_file');
+
+  # anything else
 	$r->get('/')->to('root#index');
-	$r->get('/item')->to('root#items');
-	$r->get('/item/:itemid/attachment')->to('root#item_attachments');
-	$r->get('/item/:itemid/attachment/:itemattachmentid')->to('root#item_attachment_file');
-	$r->get('/item/:itemid/attachment/:itemattachmentid/#name')->to('root#item_attachment_file');
+	$r->get('/*wildcard')->to('root#wildcard');
 }
 
 1;
