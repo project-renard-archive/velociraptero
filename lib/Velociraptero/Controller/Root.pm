@@ -17,19 +17,20 @@ sub index {
 	my $self = shift;
 
 	$self->param( app_config => j({
-		url => $self->url_for( '/items' ),
+		url => $self->url_for( '/item' ),
 	}) ); # JSON
 
 	$self->render();
 }
 
-# GET /items
+# GET /item
 sub items {
 	my ($self) = @_;
 	return $self->documents();
 }
 
-# GET /item/:itemid/attachments
+# GET /item/:itemid/attachment
+# return JSON of attachments
 # only gets the ones that are application/pdf
 sub item_attachments {
 	my ($self) = @_;
@@ -109,7 +110,7 @@ sub zotero_item_TO_JSON {
 	$data->{date} = ( $fields->{date} =~ /^(\d+)/ )[0] if exists $fields->{date};
 	$data->{author} = $authors;
 
-	$data->{attachments_url} = $self->url_for( '/item/' . $zotero_item->itemid . '/attachments' );
+	$data->{attachments_url} = $self->url_for( '/item/' . $zotero_item->itemid . '/attachment' );
 
 	$data;
 }

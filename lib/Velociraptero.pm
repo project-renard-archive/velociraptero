@@ -20,8 +20,8 @@ sub startup {
 	$r->namespaces(['Velociraptero::Controller']);
 
 	$r->get('/')->to('root#index');
-	$r->get('/items')->to('root#items');
-	$r->get('/item/:itemid/attachments')->to('root#item_attachments');
+	$r->get('/item')->to('root#items');
+	$r->get('/item/:itemid/attachment')->to('root#item_attachments');
 	$r->get('/item/:itemid/attachment/:itemattachmentid')->to('root#item_attachment_file');
 	$r->get('/item/:itemid/attachment/:itemattachmentid/#name')->to('root#item_attachment_file');
 }

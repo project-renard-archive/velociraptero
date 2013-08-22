@@ -5,4 +5,4 @@ define [ "backbone" ], (Backbone) ->
       cover: ''
       title: ''
       author: ''
-      item_attachment_url: '' # create from id
+      item_attachment_url: '' # create from model id
