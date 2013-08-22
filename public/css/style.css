@@ -1,7 +1,14 @@
 #items { float: left; width: 25% }
 #item-list { list-style-type: none; padding: 0; margin: none }
 
-.item .icon { margin-right: 100px }
+.item {
+	-webkit-hyphens: auto;
+	-moz-hyphens: auto;
+	-ms-hyphens: auto;
+	-o-hyphens: auto;
+	hyphens: auto;
+}
+.item .icon { font-size: 150px; padding-right: 100px }
 .item { color: #000 }
 .cover { width: 150px; margin: auto }
 .title { font-weight: bold; font-size: 110% }
