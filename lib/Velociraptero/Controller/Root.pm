@@ -114,7 +114,9 @@ sub zotero_documents {
 	[map { $self->zotero_item_TO_JSON($_) } $self->zotero->library
 		->items
 		->with_item_attachment_resultset('StoredItemAttachment')
-		->items_with_pdf_attachments->page(1)->all];
+		->items_with_pdf_attachments
+		#->page(1)
+		->all ];
 }
 
 sub zotero_item_TO_JSON {
