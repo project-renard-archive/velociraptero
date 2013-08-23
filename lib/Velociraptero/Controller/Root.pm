@@ -18,7 +18,7 @@ sub index {
 
 	$self->param( app_config => j({
 		url => $self->url_for( '/api/item' ),
-    push_state => $self->flash('push_state')
+		push_state => $self->flash('push_state')
 	}) ); # JSON
 
 	$self->render();
@@ -27,8 +27,8 @@ sub index {
 # GET /*wildcard
 sub wildcard {
 	my $self = shift;
-  $self->flash( push_state => $self->param('wildcard') );
-  $self->redirect_to( '/' );
+	$self->flash( push_state => $self->param('wildcard') );
+	$self->redirect_to( '/' );
 }
 
 
