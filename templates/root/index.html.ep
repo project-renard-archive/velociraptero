@@ -9,7 +9,7 @@
 </div>
 
 <script id="item-template" type="text/template">
-  <a class="item" href="{{- item_attachment_url }}">
+  <a class="item">
     <div class="cover">
       {{ if (  typeof(cover) !== 'undefined' && cover ) { }}
       <img class="cover" src="{{-  cover }}"/>
@@ -26,10 +26,21 @@
     {{ } }}
   </a>
 </script>
+
+<script id="attachment-template" type="text/template">
+  <iframe
+    src="<%== param 'pdfjs_viewer_url' %>?file={{- encodeURIComponent(item_attachment_file_url) }}"
+    seamless
+    class="file-view">
+  </iframe>
+</script>
+
+
 %= javascript begin
   var require = {
     config: {
-      "cs!app/app": <%== param 'app_config' %>
+      "cs!app/app": <%== param 'app_config' %>,
+      "cs!app/view/attachmentview": <%== param 'attachmentview_config' %>
     }
   };
 % end
