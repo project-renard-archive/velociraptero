@@ -1,3 +1,4 @@
+# cs!app/view/itembagview
 app = app || {}
 define [ "backbone",
   "cs!app/collection/itembag"
@@ -6,11 +7,8 @@ define [ "backbone",
   class app.ItemBagView extends Backbone.View
     el: '#item-list'
 
-    events: {
-    }
-
     initialize: () ->
-      @collection.fetch({ reset: true })
+      @collection.fetch({ reset: true }) # TODO <http://backbonejs.org/#FAQ-bootstrap>
       @render
 
       @listenTo @collection, 'add', @_render_item
