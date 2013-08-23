@@ -53,7 +53,8 @@ sub item_attachments {
 			{
 				id => $_->{attachment_itemid},
 				itemid => $_->{itemid},
-				item_attachment_url => $self->url_for(
+				mimetype => $_->{mimetype},
+				item_attachment_file_url => $self->url_for(
 					'/api/item/'. $_->{itemid} .
 					'/attachment/' . $_->{attachment_itemid} .
 					'/' . $_->{name} )
@@ -68,6 +69,7 @@ sub item_attachment_info {
 			? $item_attachment->get_column('sourceitemid')
 			: $item_attachment->get_column('itemid') ),
 		attachment_itemid => $item_attachment->get_column('itemid'),
+		mimetype => $item_attachment->get_column('mimetype'),
 		name => ($item_attachment->uri->path_segments)[-1],
 	};
 }
