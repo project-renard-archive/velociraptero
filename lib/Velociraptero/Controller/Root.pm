@@ -20,7 +20,11 @@ sub index {
 		url => $self->url_for( '/api/item' ),
 		push_state => $self->flash('push_state')
 	}) ); # JSON
-
+	my $pdfjs_url = $self->url_for('/vendor/zmughal-build-pdf.js/web/viewer.html');
+	$self->param( pdfjs_viewer_url => $pdfjs_url );
+	$self->param( attachmentview_config => j({
+		pdfjs_viewer_url => $pdfjs_url
+	}));
 	$self->render();
 }
 
