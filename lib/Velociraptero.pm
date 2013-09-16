@@ -15,7 +15,7 @@ sub startup {
 		$self->config->{zotero_db};
 	});
 
-  # Router
+	# Router
 	my $r = $self->routes;
 	$r->namespaces(['Velociraptero::Controller']);
 
@@ -24,7 +24,7 @@ sub startup {
 	$r->get('/api/item/:itemid/attachment/:itemattachmentid')->to('root#item_attachment_file');
 	$r->get('/api/item/:itemid/attachment/:itemattachmentid/#name')->to('root#item_attachment_file');
 
-  # anything else
+	# anything else
 	$r->get('/')->to('root#index');
 	$r->get('/*wildcard')->to('root#wildcard');
 }
