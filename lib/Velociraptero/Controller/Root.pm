@@ -157,5 +157,37 @@ sub documents {
 	$self->render( json => $self->zotero_documents );
 }
 
+sub collection {
+	my ($self) = @_;
+	my $data = {};
+	$data = {
+		label => 'My Library',
+		id => 0, # id 0 is not from the DB, but I'll use it here
+		children => [ map { $self->_get_collection($_) }
+			$self->_get_toplevel_collections->all ],
+	};
+	$self->render( json => $data );
+}
+
+sub _get_toplevel_collections {
+	my ($self) = @_;
+	# TODO: maybe this can be cleaned up in Biblio::Zotero::DB itself
+	my $get_top_level_collections = $self->zotero
+		->library
+		->collections
+		->search( {
+			libraryid => undef,
+			parentcollectionid => undef });
+}
+
+sub _get_collection {
+	my ($self, $collection) = @_;
+	return {
+		name => $collection->collectionname,
+		id => $collection->collectionid,
+		children => [ map { $self->_get_collection($_) }
+			$collection->children->all ],
+	};
+}
 
 1;

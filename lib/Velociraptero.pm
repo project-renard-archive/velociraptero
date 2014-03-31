@@ -19,6 +19,7 @@ sub startup {
 	my $r = $self->routes;
 	$r->namespaces(['Velociraptero::Controller']);
 
+	$r->get('/api/library')->to('root#collection');
 	$r->get('/api/item')->to('root#items');
 	$r->get('/api/item/:itemid/attachment')->to('root#item_attachments');
 	$r->get('/api/item/:itemid/attachment/:itemattachmentid')->to('root#item_attachment_file');
