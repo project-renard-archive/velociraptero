@@ -9,6 +9,7 @@ use Try::Tiny;
 use Path::Class;
 use Path::Class::URI;
 use URI::Escape;
+use List::UtilsBy qw(sort_by);
 
 use constant MIMETYPE_PDF => 'application/pdf';
 
@@ -18,6 +19,7 @@ sub index {
 
 	$self->param( app_config => j({
 		url => $self->url_for( '/api/item' ),
+		category_url => $self->url_for( '/api/library' ),
 		push_state => $self->flash('push_state')
 	}) ); # JSON
 	my $pdfjs_url = $self->url_for('/vendor/zmughal-build-pdf.js/web/viewer.html');
@@ -160,13 +162,13 @@ sub documents {
 sub collection {
 	my ($self) = @_;
 	my $data = {};
-	$data = {
+	$data = [ {
 		label => 'My Library',
 		id => 0, # id 0 is not from the DB, but I'll use it here
-		children => [ map { $self->_get_collection($_) }
-			$self->_get_toplevel_collections->all ],
-	};
-	$self->render( json => $data );
+		children => $self->_get_collection_recurse(
+			scalar($self->_get_toplevel_collections)),
+	} ];
+	$self->render( json => [$data] );
 }
 
 sub _get_toplevel_collections {
@@ -183,11 +185,18 @@ sub _get_toplevel_collections {
 sub _get_collection {
 	my ($self, $collection) = @_;
 	return {
-		name => $collection->collectionname,
+		label => $collection->collectionname,
 		id => $collection->collectionid,
-		children => [ map { $self->_get_collection($_) }
-			$collection->children->all ],
+		children => $self->_get_collection_recurse( 
+			scalar($collection->children)),
 	};
+}
+
+sub _get_collection_recurse {
+	my ($self, $collection_rs) = @_;
+	[ map { $self->_get_collection($_) }
+		sort_by { fc $_->collectionname  }
+		$collection_rs->all ];
 }
 
 1;

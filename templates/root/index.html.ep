@@ -1,6 +1,10 @@
 % layout 'default';
 % title 'Velociraptero';
 
+<div id="category" class="nav">
+<div id="category-tree"></div>
+</div>
+
 <div id="items" class="nav">
 <ul id="item-list" class="nav nav-pills"></ul>
 </div>

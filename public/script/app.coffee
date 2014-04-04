@@ -12,17 +12,29 @@ define ["backbone"
   "cs!app/view/itembagview",
   "cs!app/collection/itembag",
   "cs!app/view/attachmentview",
+  "cs!app/view/categorytreeview",
+  "cs!app/collection/categorybag",
   "module",
   ],
-  (Backbone, Router, AppDispatch, ItemBagView, ItemBag, AttachmentView, module) ->
+  (Backbone, Router, AppDispatch,
+    ItemBagView, ItemBag,
+    AttachmentView,
+    CategoryTreeView, CategoryBag
+    module) ->
     # Router is a singleton
     class app
       constructor: ->
         collection = new ItemBag [],
           url: module.config().url
-        itembag_view = new ItemBagView
-          collection: collection
+        # we don't load the ItemBagView first anymore
+        #itembag_view = new ItemBagView
+          #collection: collection
         attachmentview = new AttachmentView()
+
+        categorybag = new CategoryBag [],
+          url: module.config().category_url
+        category_view = new CategoryTreeView
+          collection: categorybag
 
         # TODO these events should be refactored
         AppDispatch.on 'item:show_attachments_by_id', (itemid) ->
@@ -58,4 +70,3 @@ define ["backbone"
         Router.navigate module.config().push_state,
           trigger: true
           replace: true
-

@@ -9,6 +9,8 @@
 
     %= stylesheet '/vendor/font-awesome/font-awesome.css'
 
+    %= stylesheet '/vendor/jqtree/jqtree.css'
+
     %= stylesheet '/css/style.css'
   </head>
   <body><%= content %></body>

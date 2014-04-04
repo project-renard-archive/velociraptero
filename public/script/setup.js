@@ -15,7 +15,8 @@ require.config({
     { name: 'underscore', main: 'underscore' },
     { name: 'backbone', main: 'backbone' },
     { name: 'cs', location: 'require-cs', main: 'cs' },
-    { name: 'coffee-script', main: 'index' }
+    { name: 'coffee-script', main: 'index' },
+    { name: 'jqtree', main: 'tree.jquery.js' }
   ]
 });
 
