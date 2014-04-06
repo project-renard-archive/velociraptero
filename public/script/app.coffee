@@ -52,15 +52,17 @@ define ["backbone"
 
         oApp = @
         AppDispatch.on 'item:show_attachments', (attachment_bag, target_window) ->
+          attachment_to_open
           if attachment_bag.length == 1 # if there is only one attachment_bag, open it
-            attachment_url = Router.item_attachment_file_url( attachment_bag.at(0) )
-            if( target_window )
-              target_window.location.href = attachment_url
-            else
-              AppDispatch.trigger('attachment:open_attachment', attachment_bag.at(0) )
+            attachment_to_open = attachment_bag.at(0)
           else
-            # NOP
             # TODO display a dialog to choose the attachment
+            attachment_to_open = attachment_bag.at(0)
+          attachment_url = Router.item_attachment_file_url( attachment_to_open )
+          if( target_window )
+            target_window.location.href = attachment_url
+          else
+            AppDispatch.trigger('attachment:open_attachment', attachment_to_open )
 
         AppDispatch.on 'attachment:open_attachment', (attachment_model) ->
           # retrieve the file and display it
