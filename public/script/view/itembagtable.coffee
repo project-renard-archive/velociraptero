@@ -39,9 +39,7 @@ define [ "backbone",
       # selectable rows
       table = $(@el)
       $('#item-data-table').delegate 'tbody > tr > td', 'click', () ->
-        $('#item-data-table tr.active').removeClass('active')
         tr =  $(this).closest('tr')
-        tr.addClass( 'active' )
         datatable_row = table.dataTable().fnGetData( tr )
         attachment_window = window.open("", '_blank')
         AppDispatch.trigger( 'item:select', datatable_row, attachment_window )
