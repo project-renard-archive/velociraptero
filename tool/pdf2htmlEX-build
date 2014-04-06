@@ -1,0 +1,43 @@
+#!/bin/bash
+
+CURDIR=`dirname "$0"`
+cd "$CURDIR/.."
+mkdir pdf2htmlEX
+cd pdf2htmlEX
+
+# see <https://github.com/coolwanglu/pdf2htmlEX/wiki/Building>
+# and <https://github.com/coolwanglu/pdf2htmlEX/blob/master/.travis.yml>
+
+
+wget 'https://github.com/coolwanglu/pdf2htmlEX/archive/master.tar.gz' -O - | tar -zxf -
+
+
+# before_install
+sudo apt-get update -qq
+sudo apt-get build-dep libpoppler-dev libpoppler-cpp-dev
+sudo apt-get install -qq libpoppler-dev libspiro-dev libcairo-dev libfreetype6-dev libpango1.0-dev libpoppler-private-dev
+
+# install:
+export LIBRARY_PATH=/usr/local/lib
+export LD_LIBRARY_PATH=/usr/local/lib
+pushd .
+wget 'https://github.com/coolwanglu/fontforge/archive/pdf2htmlEX.tar.gz' -O - | tar -zxf -
+pushd fontforge-pdf2htmlEX && ./autogen.sh && ./configure && make && sudo make install && popd
+popd
+
+pushd .
+# using unstable version because the stable version (poppler-0.24.5.tar.xz) will not compile with pdf2htmlEX
+wget http://poppler.freedesktop.org/poppler-0.25.2.tar.xz -O - | tar -Jxf -
+pushd poppler-0.25.2 && ./configure --enable-xpdf-headers && make && sudo make install && popd
+popd
+
+
+
+cd pdf2htmlEX-master
+# before_script:
+cmake -DENABLE_SVG=ON  -DPOPPLER_INCLUDE_DIRS=/usr/local/include/poppler
+# script:
+make VERBOSE=1
+make test
+sudo make install
+/usr/local/bin/pdf2htmlEX -v
