@@ -19,7 +19,8 @@
     "bootstrap": "~3.1.1",
     "font-awesome": "~3.2.1",
     "jqtree": "~0.20",
-    "DataTables": "~1.10.0-beta.2"
+    "DataTables": "~1.10.0-beta.2",
+    "datatables-plugins": ""
   },
   "install": {
     "path": "public/vendor",
@@ -34,6 +35,11 @@
         "bower_components/font-awesome/font/fontawesome-webfont.svg",
         "bower_components/font-awesome/font/fontawesome-webfont.ttf",
         "bower_components/font-awesome/font/fontawesome-webfont.woff"
+      ],
+      "datatables-plugins": [
+        "bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css",
+        "bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.js",
+        "bower_components/datatables-plugins/api/fnReloadAjax.js"
       ]
     }
   }
