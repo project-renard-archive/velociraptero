@@ -1,3 +1,8 @@
+#!/bin/sh
+
+CURDIR=`dirname "$0"`
+cd "$CURDIR/.."
+
 bower-installer
 mv public/vendor/zmughal-build-pdf.js/zmughal-build-pdf.js/vendor/{build,web} public/vendor/zmughal-build-pdf.js
 rm -Rf public/vendor/zmughal-build-pdf.js/zmughal-build-pdf.js
