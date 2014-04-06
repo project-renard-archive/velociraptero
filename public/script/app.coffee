@@ -51,15 +51,13 @@ define ["backbone"
           attachment_bag.fetch { reset: true }
 
         oApp = @
-        AppDispatch.on 'item:show_attachments', (attachment_bag) ->
-          console.log attachment_bag
+        AppDispatch.on 'item:show_attachments', (attachment_bag, target_window) ->
           if attachment_bag.length == 1 # if there is only one attachment_bag, open it
-            attachment_url = Router. item_attachment_file_url( attachment_bag.at(0) )
-            console.log attachment_url
-            oApp.newTab(attachment_url)
-            window.open(attachment_url, '_blank')
-            # Like running the following, but in new window / tab
-            # AppDispatch.trigger('attachment:open_attachment', attachment_bag.at(0) )
+            attachment_url = Router.item_attachment_file_url( attachment_bag.at(0) )
+            if( target_window )
+              target_window.location.href = attachment_url
+            else
+              AppDispatch.trigger('attachment:open_attachment', attachment_bag.at(0) )
           else
             # NOP
             # TODO display a dialog to choose the attachment
@@ -67,6 +65,7 @@ define ["backbone"
         AppDispatch.on 'attachment:open_attachment', (attachment_model) ->
           # retrieve the file and display it
           attachmentview.model = attachment_model
+          document.title = attachment_model.get('title')
           attachmentview.render()
 
         AppDispatch.on 'category:show_category', (category_node) ->
@@ -75,11 +74,11 @@ define ["backbone"
           collection.id = category_node.id
           collection.reset()
 
-        AppDispatch.on 'item:select', (datatable_row) ->
+        AppDispatch.on 'item:select', (datatable_row, target_window) ->
           attachment_bag = new AttachmentBag [],
             url: datatable_row.attachments_url
           attachment_bag.once 'reset', ->
-            AppDispatch.trigger 'item:show_attachments', attachment_bag
+            AppDispatch.trigger 'item:show_attachments', attachment_bag, target_window
           attachment_bag.fetch { reset: true }
 
         AppDispatch.on 'view:index', () ->

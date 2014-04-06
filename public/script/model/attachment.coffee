@@ -4,6 +4,7 @@ define [ "backbone" ], (Backbone) ->
   class app.Attachment extends Backbone.Model
     defaults:
       itemid: ''
+      title: ''
       mimetype: ''
       attachmentid: ''
       item_attachment_file_url: ''

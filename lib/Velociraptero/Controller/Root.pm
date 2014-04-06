@@ -49,28 +49,30 @@ sub items {
 # only gets the ones that are application/pdf
 sub item_attachments {
 	my ($self) = @_;
+	$self->render( json => $self->item_attachments_TO_JSON($self->param('itemid')) );
+}
 
+sub item_attachments_TO_JSON {
+	my ($self, $itemid) = @_;
 	my @attachment_info = map {
 		$self->item_attachment_info($_)
-	} @{ $self->get_pdf_attachments( $self->param('itemid') ) };
-
-	$self->render( json => [
-		map {
-			{
-				id => $_->{attachment_itemid},
-				itemid => $_->{itemid},
-				mimetype => $_->{mimetype},
-				item_attachment_file_url => $self->url_for(
-					'/api/item/'. $_->{itemid} .
-					'/attachment/' . $_->{attachment_itemid} .
-					'/' . $_->{name} )
-			}
-		} @attachment_info ] );
+	} @{ $self->get_pdf_attachments( $itemid ) };
+	[ map {
+		{
+			id => $_->{attachment_itemid},
+			itemid => $_->{itemid},
+			title => $_->{title},
+			mimetype => $_->{mimetype},
+			item_attachment_file_url => $self->url_for(
+				'/api/item/'. $_->{itemid} .
+				'/attachment/' . $_->{attachment_itemid} .
+				'/' . $_->{name} )
+		} } @attachment_info ];
 }
 
 sub item_attachment_info {
 	my ($self, $item_attachment) = @_;
-	{
+	my $data = {
 		itemid => ( defined $item_attachment->sourceitemid
 			? $item_attachment->get_column('sourceitemid')
 			: $item_attachment->get_column('itemid') ),
@@ -78,6 +80,17 @@ sub item_attachment_info {
 		mimetype => $item_attachment->get_column('mimetype'),
 		name => ($item_attachment->uri->path_segments)[-1],
 	};
+	if( $data->{itemid} == $data->{attachment_itemid} ) {
+		# just a file with no sourceitem
+		$data->{title} = $data->{name};
+	} else {
+		# get title from title of sourceitem
+		my $item_info = $self->zotero_item_TO_JSON($item_attachment->sourceitemid);
+		$data->{title} = defined $item_info->{title}
+			?  $item_info->{title}
+			: '-';
+	}
+	$data;
 }
 
 sub get_pdf_attachments {
@@ -208,11 +221,11 @@ sub _get_collection_recurse {
 sub collection_items {
 	my ($self) = @_;
 	$self->render( json =>
-		$self->collection_items_JSON(
+		$self->collection_items_TO_JSON(
 			$self->param('collectionid') ) );
 }
 
-sub collection_items_JSON {
+sub collection_items_TO_JSON {
 	my ($self, $collectionid) = @_;
 	[ map { $self->zotero_item_TO_JSON($_) }
 		$self->zotero->schema
@@ -225,7 +238,7 @@ sub collection_items_JSON {
 
 sub collection_items_datatable {
 	my ($self) = @_;
-	my $item_list = $self->collection_items_JSON(
+	my $item_list = $self->collection_items_TO_JSON(
 				$self->param('collectionid') );
 	for my $item (@$item_list) {
 		$item->{authors} = join "; ", @{$item->{author}};

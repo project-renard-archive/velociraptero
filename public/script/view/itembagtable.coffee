@@ -3,9 +3,11 @@ app = app || {}
 define [ "backbone",
   "cs!app/collection/itembag",
   "cs!app/event/appdispatch",
+  "cs!app/collection/attachmentbag",
+  "cs!app/router/router",
   "datatables"
 ],
-(Backbone, ItemBag, AppDispatch) ->
+(Backbone, ItemBag, AppDispatch, AttachmentBag, Router) ->
   require([ "datatables-plugins/dataTables.bootstrap", "datatables-plugins/fnReloadAjax" ])
   class app.ItemBagTable extends Backbone.View
     el: '#item-data-table'
@@ -37,11 +39,13 @@ define [ "backbone",
       # selectable rows
       table = $(@el)
       $('#item-data-table').on 'draw.dt', () ->
-        $('#item-data-table tbody tr').on 'click', () ->
+        $('#item-data-table').delegate 'tbody > tr > td', 'click', () ->
           $('#item-data-table tr.active').removeClass('active')
-          $(this).addClass( 'active' )
-          row_data = table.dataTable().fnGetData( this )
-          AppDispatch.trigger( 'item:select', row_data )
+          tr =  $(this).closest('tr')
+          tr.addClass( 'active' )
+          datatable_row = table.dataTable().fnGetData( tr )
+          attachment_window = window.open("", '_blank')
+          AppDispatch.trigger( 'item:select', datatable_row, attachment_window )
 
       @listenTo @collection, 'reset', @render
 
