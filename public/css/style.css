@@ -1,5 +1,7 @@
+/* need to shift the jqtree div to the right a bit */
 #category { padding-left: 20px }
 
+/* document (for pdfjs) should take up entire page */
 #doc { position: fixed; left: 0%; width: 100%; height: 100% }
 #doc iframe {
     display: block;
