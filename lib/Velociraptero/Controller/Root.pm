@@ -145,13 +145,16 @@ sub zotero_item_get_authors {
 			if ( $_->lastname and $_->firstname ) { # TODO, perhaps do this client-side?
 				"@{[$_->lastname]}, @{[$_->firstname]}"
 			} elsif( $_->lastname ) {
-			"@{[$_->lastname]}"
+				"@{[$_->lastname]}"
 			} else {
-			"@{[$_->firstname]}"
+				"@{[$_->firstname]}"
 			}
 		}
 		map { $_->creatorid->creatordataid } # TODO separate by creatortypeid and put as a convenience method in
-		$zotero_item->item_creators->search({}, { order_by => 'orderindex' } )->all ];
+		$zotero_item->item_creators->search(
+			{ creatortypeid => $self->zotero_creatortypeid_author },
+			{ order_by => 'orderindex' } )->all ];
+
 }
 
 sub documents {
@@ -184,9 +187,12 @@ sub _get_toplevel_collections {
 
 sub _get_collection {
 	my ($self, $collection) = @_;
+	my $id = $collection->collectionid;
 	return {
 		label => $collection->collectionname,
 		id => $collection->collectionid,
+		url => $self->url_for("/api/library/$id"),
+		datatable_url => $self->url_for("/api/library/$id/datatable"),
 		children => $self->_get_collection_recurse( 
 			scalar($collection->children)),
 	};
@@ -197,6 +203,46 @@ sub _get_collection_recurse {
 	[ map { $self->_get_collection($_) }
 		sort_by { fc $_->collectionname  }
 		$collection_rs->all ];
+}
+
+sub collection_items {
+	my ($self) = @_;
+	$self->render( json =>
+		$self->collection_items_JSON(
+			$self->param('collectionid') ) );
+}
+
+sub collection_items_JSON {
+	my ($self, $collectionid) = @_;
+	[ map { $self->zotero_item_TO_JSON($_) }
+		$self->zotero->schema
+			->resultset('Collection')
+			->find($collectionid)
+			->collection_items_rs
+			->search_related_rs('itemid')
+			->all ];
+}
+
+sub collection_items_datatable {
+	my ($self) = @_;
+	my $item_list = $self->collection_items_JSON(
+				$self->param('collectionid') );
+	for my $item (@$item_list) {
+		$item->{authors} = join "; ", @{$item->{author}};
+		delete $item->{author};
+
+		# patch up missing fields
+		for my $field (qw/title date/) {
+			$item->{$field} = '-' unless exists $item->{$field};
+		}
+	}
+	my $data = {
+		sEcho => 1,
+		iTotalRecords => scalar @$item_list,
+		iTotalDisplayRecords => scalar @$item_list,
+		aaData => $item_list
+	};
+	$self->render( json => $data );
 }
 
 1;

@@ -10,6 +10,8 @@
     %= stylesheet '/vendor/font-awesome/font-awesome.css'
 
     %= stylesheet '/vendor/jqtree/jqtree.css'
+    %= stylesheet '/vendor/DataTables/jquery.dataTables.css'
+    %= stylesheet '/vendor/datatables-plugins/dataTables.bootstrap.css'
 
     %= stylesheet '/css/style.css'
   </head>

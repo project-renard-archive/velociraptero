@@ -1,24 +1,9 @@
-#items { float: left; width: 25% }
-#item-list { list-style-type: none; padding: 0; margin: none }
+#category { padding-left: 20px }
 
-.item {
-	-webkit-hyphens: auto;
-	-moz-hyphens: auto;
-	-ms-hyphens: auto;
-	-o-hyphens: auto;
-	hyphens: auto;
+.table-striped > tbody > tr.active {
+  background-color: green !important;
 }
-
-.item { width: 100% }
-
-.item .icon { font-size: 150px; padding-right: 100px }
-.item { color: #000 }
-.cover { width: 150px  }
-.title { font-weight: bold; font-size: 110% }
-.author { font-style: italic; font-size: 100% }
-.date { font-size: 90% }
-
-#doc { position: fixed; left: 25%; width: 75%; height: 100% }
+#doc { position: fixed; left: 0%; width: 100%; height: 100% }
 #doc iframe {
     display: block;
     width: 100%;

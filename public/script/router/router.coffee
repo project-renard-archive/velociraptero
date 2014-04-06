@@ -15,6 +15,9 @@ define [ "backbone", "cs!app/event/appdispatch" ], (Backbone, AppDispatch) ->
       AppDispatch.on 'attachment:open_attachment', (attachment_model) =>
         @navigate @item_attachment_file_url(attachment_model)
 
+    index: () ->
+      AppDispatch.trigger 'view:index'
+
     item_attachments: (itemid) ->
       AppDispatch.trigger 'item:show_attachments_by_id', itemid
 
