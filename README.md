@@ -5,4 +5,6 @@ configured by editing `velociraptero.conf`.
 
 ## Install dependencies:
 
-`cpanm --installdeps .`
+`
+    cpanm --installdeps .
+`
