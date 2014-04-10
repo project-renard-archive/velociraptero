@@ -66,7 +66,10 @@ sub item_attachments_TO_JSON {
 			item_attachment_file_url => $self->url_for(
 				'/api/item/'. $_->{itemid} .
 				'/attachment/' . $_->{attachment_itemid} .
-				'/' . $_->{name} )
+				'/' . $_->{name} ),
+			item_attachment_cover_url => $self->url_for(
+				'/api/item/'. $_->{itemid} .
+				'/attachment-cover/' . $_->{attachment_itemid} ),
 		} } @attachment_info ];
 }
 
@@ -218,6 +221,7 @@ sub _get_collection_recurse {
 		$collection_rs->all ];
 }
 
+# GET /api/library/:collectionid
 sub collection_items {
 	my ($self) = @_;
 	$self->render( json =>
@@ -236,6 +240,7 @@ sub collection_items_TO_JSON {
 			->all ];
 }
 
+# GET /api/library/:collectionid/datatable
 sub collection_items_datatable {
 	my ($self) = @_;
 	my $item_list = $self->collection_items_TO_JSON(
@@ -256,6 +261,12 @@ sub collection_items_datatable {
 		aaData => $item_list
 	};
 	$self->render( json => $data );
+}
+
+# GET /api/item/:itemid/attachment-cover/:itemattachmentid
+sub item_attachment_cover {
+  my ($self) = @_;
+  $self->redirect_to('/img/book.png');
 }
 
 1;

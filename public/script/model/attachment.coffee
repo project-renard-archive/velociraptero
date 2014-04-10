@@ -8,6 +8,7 @@ define [ "backbone" ], (Backbone) ->
       mimetype: ''
       attachmentid: ''
       item_attachment_file_url: ''
+      item_attachment_cover_url: ''
 
     sync: ->
       # NOP: we'll have no syncing here
