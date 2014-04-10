@@ -5,7 +5,6 @@
     %= javascript '/vendor/jquery/jquery.js'
 
     %= stylesheet '/vendor/bootstrap/bootstrap.css'
-    %= javascript '/vendor/bootstrap/bootstrap.js'
 
     %= stylesheet '/vendor/font-awesome/font-awesome.css'
 

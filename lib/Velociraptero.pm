@@ -36,6 +36,8 @@ sub startup {
 	$r->get('/api/item/:itemid/attachment')->to('root#item_attachments');
 	$r->get('/api/item/:itemid/attachment/:itemattachmentid')->to('root#item_attachment_file');
 	$r->get('/api/item/:itemid/attachment/:itemattachmentid/#name')->to('root#item_attachment_file');
+
+	$r->get('/api/item/:itemid/attachment-cover')->to('root#item_attachment_cover_all');
 	$r->get('/api/item/:itemid/attachment-cover/:itemattachmentid')->to('root#item_attachment_cover');
 
 	# anything else

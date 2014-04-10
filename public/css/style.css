@@ -9,3 +9,7 @@
     height: 100%;
     border: none;
 }
+
+.attachment-cover {
+  max-width: 100px;
+}

@@ -11,12 +11,14 @@ require.config({
       deps: ["underscore", "jquery"],
       exports: "Backbone"
     },
-    "datatables-plugin": { deps: ["datatables"] },
+    "datatables-plugin": { deps: ["datatables", "bootstrap"] },
+    "bootstrap": { deps: ["jquery"] },
   },
   packages: [
     { name: 'jquery', main: 'jquery' },
     { name: 'underscore', main: 'underscore' },
     { name: 'backbone', main: 'backbone' },
+    { name: 'bootstrap', main: 'bootstrap' },
     { name: 'cs', location: 'require-cs', main: 'cs' },
     { name: 'coffee-script', main: 'index' },
     { name: 'jqtree', main: 'tree.jquery.js' },
