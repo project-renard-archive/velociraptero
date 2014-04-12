@@ -12,4 +12,3 @@ requires 'URI::Escape';
 requires 'utf8::all';
 requires 'CHI';
 requires 'File::HomeDir';
-requires 'Image::Magick::Thumbnail::PDF';
