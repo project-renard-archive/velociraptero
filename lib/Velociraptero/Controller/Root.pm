@@ -152,7 +152,7 @@ sub zotero_item_TO_JSON {
 
 	$data->{attachments_url} = $self->url_for( '/api/item/' . $zotero_item->itemid . '/attachment' );
 
-  $data->{item_attachment_cover_url} = $self->url_for(
+	$data->{item_attachment_cover_url} = $self->url_for(
 				'/api/item/'. $zotero_item->itemid . '/attachment-cover' );
 
 	$data;
@@ -268,16 +268,16 @@ sub collection_items_datatable {
 
 # GET /api/item/:itemid/attachment-cover
 sub item_attachment_cover_all {
-  my ($self) = @_;
-  # TODO
-  $self->redirect_to('/img/book.png');
+	my ($self) = @_;
+	# TODO
+	$self->redirect_to('/img/book.png');
 }
 
 # GET /api/item/:itemid/attachment-cover/:itemattachmentid
 sub item_attachment_cover {
-  my ($self) = @_;
-  # TODO
-  $self->redirect_to('/img/book.png');
+	my ($self) = @_;
+	# TODO
+	$self->redirect_to('/img/book.png');
 }
 
 1;

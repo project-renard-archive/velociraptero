@@ -15,14 +15,14 @@ sub startup {
 		$self->config->{zotero_db};
 	});
 
-  my $creatortypeid_author = $self->zotero->schema
-    ->resultset('CreatorType')
-    ->search( { creatortype => 'author' } )
-    ->first->creatortypeid;
+	my $creatortypeid_author = $self->zotero->schema
+		->resultset('CreatorType')
+		->search( { creatortype => 'author' } )
+		->first->creatortypeid;
 	$self->helper(zotero_creatortypeid_author => sub {
-    $creatortypeid_author;
+		$creatortypeid_author;
 	});
-    
+
 
 	# Router
 	my $r = $self->routes;
