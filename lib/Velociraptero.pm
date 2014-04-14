@@ -15,6 +15,11 @@ sub startup {
 		$self->config->{zotero_db};
 	});
 
+	$self->helper(cache => sub {
+		$self->config->{chi};
+	});
+
+
 	my $creatortypeid_author = $self->zotero->schema
 		->resultset('CreatorType')
 		->search( { creatortype => 'author' } )

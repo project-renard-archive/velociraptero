@@ -40,7 +40,7 @@ method png_thumbnail( Str $png, Int $height = 600 ) {
 =back
 
 =cut
-method pdf_to_png(
+method pdf_to_png (
 	Str $pdf_file,
 	Int :$page_number = 0,
 	Int :$density = 300

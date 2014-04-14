@@ -11,6 +11,8 @@ use Path::Class::URI;
 use URI::Escape;
 use List::UtilsBy qw(sort_by);
 
+use Velociraptero::Util::PDFImage;
+
 use constant MIMETYPE_PDF => 'application/pdf';
 
 # GET /
@@ -118,13 +120,14 @@ sub get_pdf_attachments {
 sub item_attachment_file {
 	my $self = shift;
 
-	my $attachment_id = $self->param('itemattachmentid');
-	my $item_attachment = $self->zotero->schema->resultset('ItemAttachment')->find( $attachment_id  );
-
-	# TODO only if the scheme is file:
-	my $filepath = file_from_uri($item_attachment->uri);
-	$self->render_file( filepath => $filepath,
+	my $item_attachment = $self->_get_itemattachmentid( $self->param('itemattachmentid') );
+	$self->render_file( filepath => file_from_uri($item_attachment->uri),
 		format => $self->app->types->detect( $item_attachment->mimetype ) );
+}
+
+sub _get_itemattachmentid {
+	my ($self, $attachment_id) = @_;
+	my $item_attachment = $self->zotero->schema->resultset('ItemAttachment')->find( $attachment_id  );
 }
 
 sub zotero_documents {
@@ -269,15 +272,32 @@ sub collection_items_datatable {
 # GET /api/item/:itemid/attachment-cover
 sub item_attachment_cover_all {
 	my ($self) = @_;
-	# TODO
-	$self->redirect_to('/img/book.png');
+	# TODO: what if there are no attachments?
+	my $itemattachmentid = $self->get_pdf_attachments(
+		$self->param('itemid') )->[0]->get_column('itemid');
+	$self->redirect_to($self->url_for() . '/' . $itemattachmentid );
 }
 
 # GET /api/item/:itemid/attachment-cover/:itemattachmentid
 sub item_attachment_cover {
 	my ($self) = @_;
-	# TODO
-	$self->redirect_to('/img/book.png');
+	# TODO: what if this fails
+	my $png_thumb =
+		$self->_get_thumbnail_for_itemattachmentid(
+			$self->param('itemattachmentid') );
+	$self->render( data => $png_thumb, format => 'png' )
+}
+
+sub _get_thumbnail_for_itemattachmentid {
+	my ($self, $itemattachmentid) = @_;
+	$self->cache->compute("thumb-$itemattachmentid", '1 year', sub {
+		my $filepath = file_from_uri(
+				$self->_get_itemattachmentid( $itemattachmentid )->uri
+			);
+
+		my $png_data = Velociraptero::Util::PDFImage->pdf_to_png( "$filepath"  );
+		my $png_thumb_data = Velociraptero::Util::PDFImage->png_thumbnail( $png_data );
+	});
 }
 
 1;
