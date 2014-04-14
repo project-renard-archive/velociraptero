@@ -13,6 +13,7 @@ my $pdf2htmlEX_bin = 'pdf2htmlEX';
 method pdf2htmlEX_render( Str $pdf_file ) {
 	my $fh = File::Temp->new;
 
+	# need to change directory to tempfile's dir
 	my $pdf_file_name = file( $pdf_file )->absolute;
 	my $temp_file = file($fh->filename);
 	my $ret;
