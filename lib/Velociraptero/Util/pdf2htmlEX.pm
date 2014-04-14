@@ -11,7 +11,7 @@ use Method::Signatures;
 my $pdf2htmlEX_bin = 'pdf2htmlEX';
 
 method pdf2htmlEX_render( Str $pdf_file ) {
-	my $fh = File::Temp->new(UNLINK => 0);
+	my $fh = File::Temp->new;
 
 	my $pdf_file_name = file( $pdf_file )->absolute;
 	my $temp_file = file($fh->filename);
