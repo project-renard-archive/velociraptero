@@ -40,13 +40,18 @@ method png_thumbnail( Str $png, Int $height = 600 ) {
 =back
 
 =cut
+# best to worst:
+# $self->_pdf_to_png_mudraw( @_ );
+# $self->_pdf_to_png_gs_imagemagick( @_ );
+# $self->_pdf_to_png_imagemagick( @_ );
 method pdf_to_png (
 	Str $pdf_file,
 	Int :$page_number = 0,
 	Int :$density = 300
 	) {
 	#$self->_pdf_to_png_imagemagick( @_ );
-	$self->_pdf_to_png_gs_imagemagick( @_ );
+	#$self->_pdf_to_png_gs_imagemagick( @_ );
+	$self->_pdf_to_png_mudraw( @_ );
 }
 
 method _pdf_to_png_imagemagick (
@@ -88,6 +93,22 @@ method _pdf_to_png_gs_imagemagick (
 	my $ret = system( @$cmd );
 	system('mogrify', '-flatten', $fh->filename);
 	die "ghostscript conversion failed" if $ret;
+	file($fh->filename)->slurp( iomode => '<:raw' );
+}
+
+method _pdf_to_png_mudraw (
+	Str $pdf_file,
+	Int :$page_number = 0,
+	Int :$density = 300,
+	) {
+
+	my $fh = File::Temp->new( SUFFIX => '.png' );
+	my $cmd = [ "mudraw",
+		"-r", $density,
+		"-o", $fh->filename,
+		"$pdf_file", "$page_number" ];
+	my $ret = system( @$cmd );
+	die "mupdf conversion failed" if $ret;
 	file($fh->filename)->slurp( iomode => '<:raw' );
 }
 
