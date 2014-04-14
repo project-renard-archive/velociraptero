@@ -27,7 +27,7 @@ method pdf2htmlEX_render( Str $pdf_file ) {
 }
 
 sub can_pdf2htmlEX {
-	!!which('pdf2htmlEX');
+	!!which($pdf2htmlEX_bin);
 }
 
 1;
