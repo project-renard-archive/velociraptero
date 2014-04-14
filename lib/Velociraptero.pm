@@ -45,6 +45,8 @@ sub startup {
 	$r->get('/api/item/:itemid/attachment-cover')->to('root#item_attachment_cover_all');
 	$r->get('/api/item/:itemid/attachment-cover/:itemattachmentid')->to('root#item_attachment_cover');
 
+	$r->get('/api/pdf2htmlEX_render')->to('root#pdf2htmlEX_render');
+
 	# anything else
 	$r->get('/')->to('root#index');
 	$r->get('/*wildcard')->to('root#wildcard');

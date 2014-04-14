@@ -306,8 +306,27 @@ sub _get_thumbnail_for_itemattachmentid {
 	});
 }
 
-sub _get_pdfhtml_for_itemattachmentid {
+# /api/pdf2htmlEX_render
+sub pdf2htmlEX_render {
+	my ($self) = @_;
+	my $file_url = Mojo::URL->new( $self->param('file') );
+	my $file_parts = $file_url->path;
+	shift @$file_parts while $file_parts->[0] ne 'attachment';
+	my $itemattachmentid = $file_parts->[1];
+	$self->render( text =>
+		$self->_get_pdfhtml_for_itemattachmentid($itemattachmentid)
+		);
+}
 
+sub _get_pdfhtml_for_itemattachmentid {
+	my ($self, $itemattachmentid) = @_;
+	$self->cache->compute("pdf2htmlEX-$itemattachmentid", '1 year', sub {
+		my $filepath = file_from_uri(
+				$self->_get_itemattachmentid( $itemattachmentid )->uri
+			);
+
+		my $html = Velociraptero::Util::pdf2htmlEX->pdf2htmlEX_render( "$filepath"  );
+	});
 }
 
 1;
