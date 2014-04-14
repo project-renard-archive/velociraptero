@@ -14,7 +14,7 @@ file( $fh0->filename )->spew( iomode => '>:raw', $png);
 
 ok( -s $fh0->filename, 'file contains data' );
 
-system( 'xzgv', $fh0->filename );
+#system( 'xzgv', $fh0->filename );
 
 $fh1 = File::Temp->new();
 file( $fh1->filename )->spew( iomode => '>:raw',
@@ -22,6 +22,6 @@ file( $fh1->filename )->spew( iomode => '>:raw',
 
 ok( -s $fh1->filename, 'thumbnail file contains data' );
 
-system( 'xzgv', $fh1->filename );
+#system( 'xzgv', $fh1->filename );
 
 done_testing;
