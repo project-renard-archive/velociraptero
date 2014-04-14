@@ -10,6 +10,8 @@ use Method::Signatures;
 
 my $pdftohtml_bin = 'pdftohtml';
 
+# TODO: make rendering images possible: this requires returining multiple files
+# perhaps return a ZIP file?
 method pdftohtml_render( Str $pdf_file ) {
 	my $temp = File::Temp->new( SUFFIX => '.html' );
 	my $ret = system(  $pdftohtml_bin,
