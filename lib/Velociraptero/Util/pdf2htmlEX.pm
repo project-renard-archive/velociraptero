@@ -22,7 +22,7 @@ method pdf2htmlEX_render( Str $pdf_file ) {
 		$ret = system( $pdf2htmlEX_bin, $pdf_file_name,	$temp_file->basename );
 	}
 	die "pdf2htmlEX did not run" if $ret;
-	$temp_file->slurp;
+	$temp_file->slurp( iomode => '<:encoding(UTF-8)' );
 }
 
 sub can_pdf2htmlEX {
