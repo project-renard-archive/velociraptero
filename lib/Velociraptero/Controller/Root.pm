@@ -325,7 +325,18 @@ sub _get_pdfhtml_for_itemattachmentid {
 				$self->_get_itemattachmentid( $itemattachmentid )->uri
 			);
 
-		my $html = Velociraptero::Util::pdf2htmlEX->pdf2htmlEX_render( "$filepath"  );
+		my $html;
+		try {
+			$html = Velociraptero::Util::pdf2htmlEX->pdf2htmlEX_render( "$filepath"  );
+		} catch {
+			my $temp = File::Temp->new( SUFFIX => '.html' );
+			system(  "pdftohtml",
+				qw(-s -i -noframes),
+				"$filepath", $temp->filename );
+			$html = file($temp->filename)->slurp( iomode => '<:encoding(UTF-8)');
+			$html =~ s{bgcolor="#A0A0A0"}{};
+		};
+		$html;
 	});
 }
 
