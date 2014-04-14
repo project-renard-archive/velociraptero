@@ -12,3 +12,6 @@ requires 'URI::Escape';
 requires 'utf8::all';
 requires 'CHI';
 requires 'File::HomeDir';
+requires 'Method::Signatures';
+requires 'IPC::Run3';
+requires 'Sys::Info';
