@@ -37,7 +37,7 @@
 
 <script id="attachment-template" type="text/template">
   <iframe
-    src="<%== param 'pdfjs_viewer_url' %>?file={{- encodeURIComponent(item_attachment_file_url) }}"
+    src="<%== param 'viewer_url' %>?file={{- encodeURIComponent(item_attachment_file_url) }}"
     seamless
     class="file-view">
   </iframe>

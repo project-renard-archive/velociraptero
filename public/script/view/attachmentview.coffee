@@ -6,7 +6,7 @@ define [ "backbone", "module" ], (Backbone, module) ->
     el: '#doc'
     template: _.template( $( '#attachment-template' ).html() ),
     #model : '' # this gets passed in
-    pdfjs_viewer_url: module.config().pdfjs_viewer_url
+    viewer_url: module.config().viewer_url
 
     render: ->
       $(@el).html @template(@model.toJSON())

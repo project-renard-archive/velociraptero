@@ -12,6 +12,7 @@ use URI::Escape;
 use List::UtilsBy qw(sort_by);
 
 use Velociraptero::Util::PDFImage;
+use Velociraptero::Util::pdf2htmlEX;
 
 use constant MIMETYPE_PDF => 'application/pdf';
 
@@ -25,7 +26,12 @@ sub index {
 		push_state => $self->flash('push_state')
 	}) ); # JSON
 	my $pdfjs_url = $self->url_for('/vendor/zmughal-build-pdf.js/web/viewer.html');
-	$self->param( pdfjs_viewer_url => $pdfjs_url );
+	my $pdf2htmlEX_url = $self->url_for('/api/pdf2htmlEX_render');
+	if( Velociraptero::Util::pdf2htmlEX->can_pdf2htmlEX ) {
+		$self->param( viewer_url => $pdf2htmlEX_url );
+	} else {
+		$self->param( viewer_url => $pdfjs_url );
+	}
 	$self->param( attachmentview_config => j({
 		pdfjs_viewer_url => $pdfjs_url
 	}));
@@ -298,6 +304,10 @@ sub _get_thumbnail_for_itemattachmentid {
 		my $png_data = Velociraptero::Util::PDFImage->pdf_to_png( "$filepath"  );
 		my $png_thumb_data = Velociraptero::Util::PDFImage->png_thumbnail( $png_data );
 	});
+}
+
+sub _get_pdfhtml_for_itemattachmentid {
+
 }
 
 1;

@@ -15,3 +15,5 @@ requires 'File::HomeDir';
 requires 'Method::Signatures';
 requires 'IPC::Run3';
 requires 'Sys::Info';
+requires 'File::Which';
+requires 'File::chdir';
