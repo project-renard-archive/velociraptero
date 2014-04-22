@@ -17,3 +17,4 @@ requires 'IPC::Run3';
 requires 'Sys::Info';
 requires 'File::Which';
 requires 'File::chdir';
+requires 'Festival::Client::Async';
