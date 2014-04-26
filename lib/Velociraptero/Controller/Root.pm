@@ -14,6 +14,7 @@ use List::UtilsBy qw(sort_by);
 use Velociraptero::Util::PDFImage;
 use Velociraptero::Util::pdf2htmlEX;
 use Velociraptero::Util::pdftohtml;
+use Velociraptero::Util::FestivalTTS;
 
 use constant MIMETYPE_PDF => 'application/pdf';
 
@@ -334,6 +335,16 @@ sub _get_pdfhtml_for_itemattachmentid {
 		};
 		$html;
 	});
+}
+
+# GET /api/phrase
+sub phrase_mp3 {
+	my ($self) = @_;
+	my $text = q{In practical terms, computation of the determinant is
+	computationally inefficient, and there are faster ways to calculate the
+	inverse, such as via Gaussian Elimination.};
+	my $mp3 = Velociraptero::Util::FestivalTTS->text_to_mp3($text);
+	$self->render( data => $mp3, format => 'mp3' );
 }
 
 1;

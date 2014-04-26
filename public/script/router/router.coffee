@@ -23,6 +23,7 @@ define [ "backbone", "cs!app/event/appdispatch" ], (Backbone, AppDispatch) ->
 
     item_attachment_file: (itemid, itemattachmentid) ->
       AppDispatch.trigger 'attachment:open_attachment_by_id', itemid, itemattachmentid
+      AppDispatch.trigger 'view:doc'
 
     # return the Backbone route for opening the attachments
     item_attachments_url: (item) ->

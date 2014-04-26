@@ -47,6 +47,8 @@ sub startup {
 
 	$r->get('/api/pdf2htmlEX_render')->to('root#pdf2htmlEX_render');
 
+	$r->get('/api/phrase')->to('root#phrase_mp3');
+
 	# anything else
 	$r->get('/')->to('root#index');
 	$r->get('/*wildcard')->to('root#wildcard');

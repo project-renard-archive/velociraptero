@@ -12,6 +12,8 @@
     %= stylesheet '/vendor/DataTables/jquery.dataTables.css'
     %= stylesheet '/vendor/datatables-plugins/dataTables.bootstrap.css'
 
+    %= stylesheet '/vendor/jplayer/jplayer.pink.flag.css'
+
     %= stylesheet '/css/style.css'
   </head>
   <body><%= content %></body>

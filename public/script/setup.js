@@ -23,7 +23,8 @@ require.config({
     { name: 'coffee-script', main: 'index' },
     { name: 'jqtree', main: 'tree.jquery.js' },
     { name: 'datatables', location: 'DataTables', main: 'jquery.dataTables.js' },
-    { name: 'datatables-plugins' }
+    { name: 'datatables-plugins' },
+    { name: 'jplayer', main: 'jquery.jplayer.js' }
   ]
 });
 
