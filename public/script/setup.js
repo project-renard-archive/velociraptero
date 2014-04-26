@@ -13,6 +13,7 @@ require.config({
     },
     "datatables-plugin": { deps: ["datatables", "bootstrap"] },
     "bootstrap": { deps: ["jquery"] },
+    "jplayer.playlist": { deps: ["jplayer"] }
   },
   packages: [
     { name: 'jquery', main: 'jquery' },
@@ -24,7 +25,8 @@ require.config({
     { name: 'jqtree', main: 'tree.jquery.js' },
     { name: 'datatables', location: 'DataTables', main: 'jquery.dataTables.js' },
     { name: 'datatables-plugins' },
-    { name: 'jplayer', main: 'jquery.jplayer.js' }
+    { name: 'jplayer', main: 'jquery.jplayer.js' },
+    { name: 'jplayer.playlist', location: 'jplayer', main: 'jplayer.playlist.js' }
   ]
 });
 

@@ -48,7 +48,8 @@
         "bower_components/jplayer/skin/pink.flag/jplayer.pink.flag.css",
         "bower_components/jplayer/skin/pink.flag/jplayer.pink.flag.jpg",
         "bower_components/jplayer/skin/pink.flag/jplayer.pink.flag.video.play.png",
-        "bower_components/jplayer/skin/pink.flag/jplayer.pink.flag.seeking.gif"
+        "bower_components/jplayer/skin/pink.flag/jplayer.pink.flag.seeking.gif",
+        "bower_components/jplayer/add-on/jplayer.playlist.js"
       ]
     }
   }
