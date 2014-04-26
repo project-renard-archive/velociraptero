@@ -20,7 +20,8 @@
     "font-awesome": "~3.2.1",
     "jqtree": "~0.20",
     "DataTables": "~1.10.0-beta.2",
-    "datatables-plugins": ""
+    "datatables-plugins": "",
+    "jplayer": "2.6.1"
   },
   "install": {
     "path": "public/vendor",
