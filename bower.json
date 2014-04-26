@@ -41,6 +41,14 @@
         "bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css",
         "bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.js",
         "bower_components/datatables-plugins/api/fnReloadAjax.js"
+      ],
+      "jplayer": [
+        "bower_components/jplayer/jquery.jplayer/jquery.jplayer.js",
+        "bower_components/jplayer/jquery.jplayer/Jplayer.swf",
+        "bower_components/jplayer/skin/pink.flag/jplayer.pink.flag.css",
+        "bower_components/jplayer/skin/pink.flag/jplayer.pink.flag.jpg",
+        "bower_components/jplayer/skin/pink.flag/jplayer.pink.flag.video.play.png",
+        "bower_components/jplayer/skin/pink.flag/jplayer.pink.flag.seeking.gif"
       ]
     }
   }
