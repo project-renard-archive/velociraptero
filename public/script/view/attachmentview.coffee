@@ -24,6 +24,7 @@ define [ "backbone", "module", "jplayer.playlist" ], (Backbone, module) ->
               playlistOptions:
                 autoPlay: true
               supplied: 'mp3'
+              keyEnabled: true
             })
           myPlaylist.displayPlaylist()
           myPlaylist.play()
