@@ -338,16 +338,6 @@ sub _get_pdfhtml_for_itemattachmentid {
 	});
 }
 
-# GET /api/phrase
-sub phrase_mp3 {
-	my ($self) = @_;
-	my $text = q{In practical terms, computation of the determinant is
-	computationally inefficient, and there are faster ways to calculate the
-	inverse, such as via Gaussian Elimination.};
-	my $mp3 = Velociraptero::Util::FestivalTTS->text_to_mp3($text);
-	$self->render( data => $mp3, format => 'mp3' );
-}
-
 sub _get_sentence_data {
 	my ($self, $itemattachmentid) = @_;;
 	my $filepath = $self->_get_filepath_from_itemattachmentid(  $itemattachmentid );
@@ -374,7 +364,7 @@ sub _get_sentence_data {
 	$sentences;
 }
 
-# $r->get('/api/item/:itemid/attachment-sentence/:itemattachmentid')
+# GET /api/item/:itemid/attachment-sentence/:itemattachmentid
 sub get_sentences {
 	my ($self) = @_;
 	my $sentences = $self->_get_sentence_data( $self->param('itemattachmentid') );
@@ -387,7 +377,10 @@ sub get_sentences {
 			. '/tts/'
 			. $sentence_id );
 		$sentence->{tts_url} =  $url;
-		push @$playlist, { mp3 => $url };
+		push @$playlist, {
+			title => "$sentence_id: @{[$sentence->{text}]}",
+			mp3 => $url,
+		};
 	}
 
 	$self->render( json => { sentences => $sentences,
@@ -412,13 +405,14 @@ sub _get_filepath_from_itemattachmentid {
 	$filepath;
 }
 
-# $r->get('/api/item/:itemid/attachment-sentence/:itemattachmentid/tts/:phraseid')->to('root#get_phrase_tts');
+# GET /api/item/:itemid/attachment-sentence/:itemattachmentid/tts/:phraseid
 sub get_phrase_tts {
 	my ($self) = @_;
 	my $sentences = $self->_get_sentence_data( $self->param('itemattachmentid') );
 	my $sentence = $sentences->[ $self->param('phraseid') ];
 	my $text = $sentence->{text};
 
+	# TODO : this is blocking FIXME
 	my $mp3 = Velociraptero::Util::FestivalTTS->text_to_mp3($text);
 	$self->render( data => $mp3, format => 'mp3' );
 }
