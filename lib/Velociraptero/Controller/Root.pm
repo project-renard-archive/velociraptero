@@ -12,6 +12,7 @@ use URI::Escape;
 use List::UtilsBy qw(sort_by);
 use PDF::pdf2json;
 use Lingua::EN::Sentence::Offsets qw/get_offsets/;
+use Text::Unidecode;
 
 use Velociraptero::Util::PDFImage;
 use Velociraptero::Util::pdf2htmlEX;
@@ -412,8 +413,10 @@ sub get_phrase_tts {
 	my $sentence = $sentences->[ $self->param('phraseid') ];
 	my $text = $sentence->{text};
 
+	my $preproc = unidecode($text); # FIXME this is a sledgehammer approach
+
 	# TODO : this is blocking FIXME
-	my $mp3 = Velociraptero::Util::FestivalTTS->text_to_mp3($text);
+	my $mp3 = Velociraptero::Util::FestivalTTS->text_to_mp3($preproc);
 	$self->render( data => $mp3, format => 'mp3' );
 }
 

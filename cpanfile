@@ -21,3 +21,4 @@ requires 'Festival::Client::Async';
 requires 'PDF::pdf2json';
 requires 'String::Tagged';
 requires 'Lingua::EN::Sentence::Offsets';
+requires 'Text::Unidecode';
