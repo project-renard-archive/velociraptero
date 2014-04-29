@@ -16,6 +16,6 @@ define [ "backbone", "module", "jplayer.playlist" ], (Backbone, module) ->
       $(@player).jPlayer
         supplied: 'mp3'
       $(@player).jPlayer "setMedia",
-        mp3: '/api/phrase'
+        mp3: '/api/phrase' # TODO: load sentence IDs
       $(@player).jPlayer "play"
       @
