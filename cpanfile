@@ -18,3 +18,6 @@ requires 'Sys::Info';
 requires 'File::Which';
 requires 'File::chdir';
 requires 'Festival::Client::Async';
+requires 'PDF::pdf2json';
+requires 'String::Tagged';
+requires 'Lingua::EN::Sentence::Offsets';

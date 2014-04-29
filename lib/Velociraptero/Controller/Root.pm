@@ -10,6 +10,7 @@ use Path::Class;
 use Path::Class::URI;
 use URI::Escape;
 use List::UtilsBy qw(sort_by);
+use PDF::pdf2json;
 
 use Velociraptero::Util::PDFImage;
 use Velociraptero::Util::pdf2htmlEX;
@@ -129,7 +130,7 @@ sub item_attachment_file {
 	my $self = shift;
 
 	my $item_attachment = $self->_get_itemattachmentid( $self->param('itemattachmentid') );
-	$self->render_file( filepath => file_from_uri($item_attachment->uri),
+	$self->render_file( filepath => $self->_get_filepath_from_itemattachmentid( $self->param('itemattachmentid') ),
 		format => $self->app->types->detect( $item_attachment->mimetype ) );
 }
 
@@ -299,9 +300,7 @@ sub item_attachment_cover {
 sub _get_thumbnail_for_itemattachmentid {
 	my ($self, $itemattachmentid) = @_;
 	$self->cache->compute("thumb-$itemattachmentid", '1 year', sub {
-		my $filepath = file_from_uri(
-				$self->_get_itemattachmentid( $itemattachmentid )->uri
-			);
+		my $filepath = $self->_get_filepath_from_itemattachmentid($itemattachmentid);
 
 		my $png_data = Velociraptero::Util::PDFImage->pdf_to_png( "$filepath"  );
 		my $png_thumb_data = Velociraptero::Util::PDFImage->png_thumbnail( $png_data );
@@ -323,9 +322,7 @@ sub pdf2htmlEX_render {
 sub _get_pdfhtml_for_itemattachmentid {
 	my ($self, $itemattachmentid) = @_;
 	$self->cache->compute("pdf2htmlEX-$itemattachmentid", '1 year', sub {
-		my $filepath = file_from_uri(
-				$self->_get_itemattachmentid( $itemattachmentid )->uri
-			);
+		my $filepath = $self->_get_filepath_from_itemattachmentid($itemattachmentid);
 
 		my $html;
 		try {
@@ -346,5 +343,36 @@ sub phrase_mp3 {
 	my $mp3 = Velociraptero::Util::FestivalTTS->text_to_mp3($text);
 	$self->render( data => $mp3, format => 'mp3' );
 }
+
+# $r->get('/api/item/:itemid/attachment-sentence/:itemattachmentid')
+sub get_sentences {
+	my ($self) = @_;
+
+	my $filepath = $self->_get_filepath_from_itemattachmentid(  $self->param('itemattachmentid') );
+	my $pdf_json = PDF::pdf2json->pdf2json("$filepath");
+
+	my $string;
+
+	#$self->render( json => $pdf_json );
+
+	# algorithm
+	# for every page
+	#   for every element on page
+	#      concatentate string
+	#      #add tag saying which element it came from (this might be useful another time)
+	# Run sentence splitter
+	#    get offsets
+	#    record sentence ordinal value => [beginning, end]
+	#    #tag offsets as belong to a given sentence's ordinal value
+}
+
+sub _get_filepath_from_itemattachmentid {
+	my ($self, $itemattachmentid) = @_;
+	my $filepath = file_from_uri(
+			$self->_get_itemattachmentid( $itemattachmentid )->uri
+		);
+	$filepath;
+}
+
 
 1;

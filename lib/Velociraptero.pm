@@ -48,6 +48,7 @@ sub startup {
 	$r->get('/api/pdf2htmlEX_render')->to('root#pdf2htmlEX_render');
 
 	$r->get('/api/phrase')->to('root#phrase_mp3');
+	$r->get('/api/item/:itemid/attachment-sentence/:itemattachmentid')->to('root#get_sentences');
 
 	# anything else
 	$r->get('/')->to('root#index');
