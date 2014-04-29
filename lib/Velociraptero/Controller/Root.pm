@@ -11,7 +11,7 @@ use Path::Class::URI;
 use URI::Escape;
 use List::UtilsBy qw(sort_by);
 use PDF::pdf2json;
-use Lingua::EN::Sentence::Offsets;
+use Lingua::EN::Sentence::Offsets qw/get_offsets/;
 
 use Velociraptero::Util::PDFImage;
 use Velociraptero::Util::pdf2htmlEX;
@@ -82,6 +82,9 @@ sub item_attachments_TO_JSON {
 			item_attachment_cover_url => $self->url_for(
 				'/api/item/'. $_->{itemid} .
 				'/attachment-cover/' . $_->{attachment_itemid} ),
+			tts_model_url => $self->url_for(
+				'/api/item/'. $_->{itemid} .
+				'/attachment-sentence/' . $_->{attachment_itemid} ),
 		} } @attachment_info ];
 }
 
@@ -345,11 +348,9 @@ sub phrase_mp3 {
 	$self->render( data => $mp3, format => 'mp3' );
 }
 
-# $r->get('/api/item/:itemid/attachment-sentence/:itemattachmentid')
-sub get_sentences {
-	my ($self) = @_;
-
-	my $filepath = $self->_get_filepath_from_itemattachmentid(  $self->param('itemattachmentid') );
+sub _get_sentence_data {
+	my ($self, $itemattachmentid) = @_;;
+	my $filepath = $self->_get_filepath_from_itemattachmentid(  $itemattachmentid );
 	my $pdf_json = PDF::pdf2json->pdf2json("$filepath");
 
 	my $string;
@@ -361,7 +362,36 @@ sub get_sentences {
 		}
 	}
 
-	$self->render( text => $string );
+	my $offsets = get_offsets( $string );
+	my $sentences = [];
+	for my $o (@$offsets) {
+		my $data = {
+			text => substr($string, $o->[0], $o->[1]-$o->[0]),
+			offsets => $o,
+		};
+		push @$sentences, $data;
+	}
+	$sentences;
+}
+
+# $r->get('/api/item/:itemid/attachment-sentence/:itemattachmentid')
+sub get_sentences {
+	my ($self) = @_;
+	my $sentences = $self->_get_sentence_data( $self->param('itemattachmentid') );
+
+	my $playlist = [];
+	for my $sentence_id (0..@$sentences-1) {
+		my $sentence = $sentences->[$sentence_id];
+		my $url = $self->url_for(
+			$self->url_for()
+			. '/tts/'
+			. $sentence_id );
+		$sentence->{tts_url} =  $url;
+		push @$playlist, { mp3 => $url };
+	}
+
+	$self->render( json => { sentences => $sentences,
+		playlist => $playlist } );
 
 	# algorithm
 	# for every page
@@ -382,5 +412,15 @@ sub _get_filepath_from_itemattachmentid {
 	$filepath;
 }
 
+# $r->get('/api/item/:itemid/attachment-sentence/:itemattachmentid/tts/:phraseid')->to('root#get_phrase_tts');
+sub get_phrase_tts {
+	my ($self) = @_;
+	my $sentences = $self->_get_sentence_data( $self->param('itemattachmentid') );
+	my $sentence = $sentences->[ $self->param('phraseid') ];
+	my $text = $sentence->{text};
+
+	my $mp3 = Velociraptero::Util::FestivalTTS->text_to_mp3($text);
+	$self->render( data => $mp3, format => 'mp3' );
+}
 
 1;

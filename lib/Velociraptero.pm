@@ -49,6 +49,7 @@ sub startup {
 
 	$r->get('/api/phrase')->to('root#phrase_mp3');
 	$r->get('/api/item/:itemid/attachment-sentence/:itemattachmentid')->to('root#get_sentences');
+	$r->get('/api/item/:itemid/attachment-sentence/:itemattachmentid/tts/:phraseid')->to('root#get_phrase_tts');
 
 	# anything else
 	$r->get('/')->to('root#index');

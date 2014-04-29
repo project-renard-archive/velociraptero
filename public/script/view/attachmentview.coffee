@@ -13,9 +13,19 @@ define [ "backbone", "module", "jplayer.playlist" ], (Backbone, module) ->
     render: ->
       $(@el).html @template(@model.toJSON())
       $('#player').html @player_template()
-      $(@player).jPlayer
-        supplied: 'mp3'
-      $(@player).jPlayer "setMedia",
-        mp3: '/api/phrase' # TODO: load sentence IDs
-      $(@player).jPlayer "play"
+      tts_model =  @model.get_tts_model()
+      tts_model.fetch
+        success: ->
+          playlist = tts_model.get('playlist')
+          myPlaylist = new jPlayerPlaylist(
+            {}, # use default selectors
+            playlist,
+            {
+              playlistOptions:
+                autoPlay: true
+              supplied: 'mp3'
+            })
+          console.log myPlaylist
+          myPlaylist.displayPlaylist()
+          myPlaylist.play()
       @
