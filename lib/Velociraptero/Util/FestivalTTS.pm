@@ -7,8 +7,12 @@ use IPC::Run3;
 
 sub text_to_mp3 {
 	my ($self, $text, $mp3data) = @_;
-	# TTS after setting voice
-	my $tts = q{text2wave -eval "(voice_cmu_us_bdl_arctic_clunits)"};
+
+	# TODO add a way to choose voice
+	## TTS after setting voice
+	#my $tts = q{text2wave -eval "(voice_cmu_us_bdl_arctic_clunits)"};
+
+	my $tts = q{text2wave};
 	# encode stdin to stdout
 	my $mp3_encode = q{ lame - -};
 	my $cmd = qq{ $tts | $mp3_encode };
