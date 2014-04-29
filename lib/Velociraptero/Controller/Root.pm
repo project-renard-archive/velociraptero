@@ -11,6 +11,7 @@ use Path::Class::URI;
 use URI::Escape;
 use List::UtilsBy qw(sort_by);
 use PDF::pdf2json;
+use Lingua::EN::Sentence::Offsets;
 
 use Velociraptero::Util::PDFImage;
 use Velociraptero::Util::pdf2htmlEX;
@@ -353,7 +354,14 @@ sub get_sentences {
 
 	my $string;
 
-	#$self->render( json => $pdf_json );
+	for my $page (@$pdf_json) {
+		my $page_text = $page->{text};
+		for my $text_el (@$page_text) {
+			$string .= $text_el->{data};
+		}
+	}
+
+	$self->render( text => $string );
 
 	# algorithm
 	# for every page
