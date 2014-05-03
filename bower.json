@@ -22,7 +22,8 @@
     "DataTables": "~1.10.0-beta.2",
     "datatables-plugins": "",
     "jplayer": "2.6.1",
-    "findAndReplaceDOMText": "git://github.com/padolsey/findAndReplaceDOMText.git"
+    "findAndReplaceDOMText": "git://github.com/padolsey/findAndReplaceDOMText.git",
+    "jquery.scrollTo": "~1.4.6"
   },
   "install": {
     "path": "public/vendor",
@@ -54,6 +55,9 @@
       ],
       "findAndReplaceDOMText": [
         "bower_components/findAndReplaceDOMText/src/findAndReplaceDOMText.js"
+      ],
+      "jquery.scrollTo": [
+        "bower_components/jquery.scrollTo/jquery.scrollTo.js"
       ]
     }
   }
