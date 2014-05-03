@@ -15,6 +15,11 @@ define [ "backbone", "module", "jplayer.playlist", "findAndReplaceDOMText", "jqu
       $('#player').html @player_template()
       finder = null # for findAndReplaceDOMText
       tts_model =  @model.get_tts_model()
+      regexify_text = (text) ->
+        #text = text.replace /./g, '\\s*$&'
+        text = text.replace /[\[\]\(\)\.\+\*\?\|]/g, '\\$&' # escape metacharacters
+        text = text.replace /\s+/g, '\\s*' # turn all spaces into zero-or-more spaces
+        text
       tts_model.fetch
         success: ->
           playlist = tts_model.get('playlist')
@@ -42,13 +47,18 @@ define [ "backbone", "module", "jplayer.playlist", "findAndReplaceDOMText", "jqu
               # if page container exists, use that, otherwise just use the top
               iframe_target = if iframe_page_container then iframe_page_container else iframe_doc
 
+
               cur_idx = myPlaylist.current
               # get text in tts_model
+
+              # we use both the regular text and the unidecode text...
+              # this fixes problems that arise from differences in pdftohtml and pdf2htmlEX
+              #
+              # TODO but the best fix would be to find the nodes on the server
+              # side as Perl is more powerful at text analysis
               cur_text = tts_model.get('sentences')[cur_idx].text
-              find_str = cur_text
-              #find_str = find_str.replace /./g, '\\s*$&'
-              find_str = find_str.replace /[\[\]\(\)\.\+\*\?]/g, '\\$&' # escape metacharacters
-              find_str = find_str.replace /\s+/g, '\\s*' # turn all spaces into zero-or-more spaces
+              cur_text_unidecode = tts_model.get('sentences')[cur_idx].text_unidecode
+              find_str = "#{ regexify_text(cur_text) }|#{ regexify_text(cur_text_unidecode) }"
               console.log find_str
 
               try

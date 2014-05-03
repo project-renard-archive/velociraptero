@@ -5,6 +5,7 @@ use warnings;
 
 use PDF::pdf2json;
 use Lingua::EN::Sentence::Offsets qw/get_offsets add_acronyms/;
+use Text::Unidecode;
 
 # get abbreviations from the __DATA__ section
 my $abbrev = join "", <DATA>;
@@ -52,6 +53,7 @@ sub sentence_data {
 			text => substr($string, $o->[0], $o->[1]-$o->[0]),
 			offsets => $o,
 		};
+		$data->{text_unidecode} = unidecode($data->{text});
 		push @$sentences, $data;
 	}
 	$sentences;
