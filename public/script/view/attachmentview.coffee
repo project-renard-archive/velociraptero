@@ -45,7 +45,9 @@ define [ "backbone", "module", "jplayer.playlist", "findAndReplaceDOMText", "jqu
               cur_idx = myPlaylist.current
               # get text in tts_model
               find_str = tts_model.get('sentences')[cur_idx].text
-              find_str = find_str.replace /\s+/g, '\\s*'
+              #find_str = find_str.replace /./g, '\\s*$&'
+              find_str = find_str.replace /[\[\]\(\)\.\+\*\?]/g, '\\$&' # escape metacharacters
+              find_str = find_str.replace /\s+/g, '\\s*' # turn all spaces into zero-or-more spaces
               console.log find_str
 
 
