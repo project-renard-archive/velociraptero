@@ -29,6 +29,12 @@ sub sentence_data {
 			# add a space
 			$string .= ' ' if( $text_el->{top} != $prev_y and $prev_text !~ /-$/ );
 
+			# remove link text
+			# (NOTE this can be anywhere in the data value, not
+			# just at the beginning --- which is bad. Enough to
+			# make me rethink using pdf2json.)
+			$text_el->{data} =~ s/actionGoTo:\d+,//g;
+
 			$string .= $text_el->{data};
 			
 			$prev_text = $text_el->{data};
