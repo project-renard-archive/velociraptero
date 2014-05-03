@@ -35,7 +35,13 @@ define [ "backbone", "module", "jplayer.playlist", "findAndReplaceDOMText", "jqu
           #myPlaylist.displayPlaylist()
           #myPlaylist.play()
           # event myPlaylist on play
-          $(myPlaylist.cssSelector.jPlayer).bind $.jPlayer.event.play,
+          jPlayerEl = $(myPlaylist.cssSelector.jPlayer)
+          $('.jp-playback-rate-bar-input').change (e) ->
+            value = e.currentTarget.value
+            jPlayerEl.jPlayer
+              defaultPlaybackRate: value
+              playbackRate: value
+          jPlayerEl.bind $.jPlayer.event.play,
             () ->
               finder?.revert() # remove any highlighting from before
 
