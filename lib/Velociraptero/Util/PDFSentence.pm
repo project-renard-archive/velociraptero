@@ -61,13 +61,13 @@ sub sentence_data {
 
 
 1;
+__DATA__
 # NOTE the following abbreviations are part of citations. It would make better
 # sense to use a separate set of abbreviations in the reference section than in
 # the rest of the text.
 #
 # This may require modifying Lingua::EN::Sentence::Offsets to use objects
 # instead of package variables to store abbreviations.
-__DATA__
 trans   # transactions
 proc    # proceedings / processing
 vol     # volume
@@ -78,5 +78,7 @@ conf    # conference
 soc     # society
 anal    # analysis
 
+# These abbreviations are part of the main text content and captions in floats.
 sec     # section
 fig     # figure
+eq      # equation
