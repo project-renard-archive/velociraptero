@@ -13,3 +13,19 @@
 .attachment-cover {
   max-width: 100px;
 }
+
+#tooltip-tts {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 3000;
+  border: 1px solid #111;
+  background-color: #eee;
+  padding: 5px;
+  opacity: 0.85;
+
+  font-size: 200%;
+}
+
+#tooltip-tts h3, #tooltip-tts div { margin: 0; }

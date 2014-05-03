@@ -15,6 +15,7 @@
 <div id="doc-view" class="row">
   <div id="doc" class="container"></div>
 </div>
+<div id="tooltip-tts"></div>
 <div id="player-view" class="row">
   <div id="player"></div>
 </div>

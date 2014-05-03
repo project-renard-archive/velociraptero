@@ -44,21 +44,27 @@ define [ "backbone", "module", "jplayer.playlist", "findAndReplaceDOMText", "jqu
 
               cur_idx = myPlaylist.current
               # get text in tts_model
-              find_str = tts_model.get('sentences')[cur_idx].text
+              cur_text = tts_model.get('sentences')[cur_idx].text
+              find_str = cur_text
               #find_str = find_str.replace /./g, '\\s*$&'
               find_str = find_str.replace /[\[\]\(\)\.\+\*\?]/g, '\\$&' # escape metacharacters
               find_str = find_str.replace /\s+/g, '\\s*' # turn all spaces into zero-or-more spaces
               console.log find_str
 
+              try
+                finder = window.findAndReplaceDOMText iframe_target,
+                  find: ///#{ find_str }///
+                  wrap: $('<span class="highlight-tts" style="background-color: yellow; font-weight: bolder;">')[0]
+                  #wrap: 'b'
+                console.log finder
+                console.log $(iframe_target)
+                first_element = $(iframe_target).find('.highlight-tts').first()
+                console.log first_element
+                if( first_element )
+                  $( iframe_target ).scrollTo first_element
+              catch e
+                true
 
-              finder = window.findAndReplaceDOMText iframe_target,
-                find: ///#{ find_str }///
-                wrap: $('<span class="highlight-tts" style="background-color: yellow; font-weight: bolder;">')[0]
-                #wrap: 'b'
-              console.log finder
-              console.log $(iframe_target)
-              first_element = $(iframe_target).find('.highlight-tts').first()
-              console.log first_element
-              if( first_element )
-                $( iframe_target ).scrollTo first_element
+              # show text in tooltip
+              $('#tooltip-tts').text(cur_text)
       @
