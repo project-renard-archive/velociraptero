@@ -75,3 +75,6 @@ comput  # computing
 conf    # conference
 soc     # society
 anal    # analysis
+
+sec     # section
+fig     # figure
