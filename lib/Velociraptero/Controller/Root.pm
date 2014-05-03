@@ -11,13 +11,13 @@ use Path::Class::URI;
 use URI::Escape;
 use List::UtilsBy qw(sort_by);
 use PDF::pdf2json;
-use Lingua::EN::Sentence::Offsets qw/get_offsets/;
 use Text::Unidecode;
 
 use Velociraptero::Util::PDFImage;
 use Velociraptero::Util::pdf2htmlEX;
 use Velociraptero::Util::pdftohtml;
 use Velociraptero::Util::FestivalTTS;
+use Velociraptero::Util::PDFSentence;
 
 use constant MIMETYPE_PDF => 'application/pdf';
 
@@ -342,27 +342,7 @@ sub _get_pdfhtml_for_itemattachmentid {
 sub _get_sentence_data {
 	my ($self, $itemattachmentid) = @_;;
 	my $filepath = $self->_get_filepath_from_itemattachmentid(  $itemattachmentid );
-	my $pdf_json = PDF::pdf2json->pdf2json("$filepath");
-
-	my $string;
-
-	for my $page (@$pdf_json) {
-		my $page_text = $page->{text};
-		for my $text_el (@$page_text) {
-			$string .= $text_el->{data};
-		}
-	}
-
-	my $offsets = get_offsets( $string );
-	my $sentences = [];
-	for my $o (@$offsets) {
-		my $data = {
-			text => substr($string, $o->[0], $o->[1]-$o->[0]),
-			offsets => $o,
-		};
-		push @$sentences, $data;
-	}
-	$sentences;
+        Velociraptero::Util::PDFSentence->sentence_data("$filepath");
 }
 
 # GET /api/item/:itemid/attachment-sentence/:itemattachmentid
