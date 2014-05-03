@@ -21,7 +21,8 @@
     "jqtree": "~0.20",
     "DataTables": "~1.10.0-beta.2",
     "datatables-plugins": "",
-    "jplayer": "2.6.1"
+    "jplayer": "2.6.1",
+    "findAndReplaceDOMText": "git://github.com/padolsey/findAndReplaceDOMText.git"
   },
   "install": {
     "path": "public/vendor",
@@ -50,6 +51,9 @@
         "bower_components/jplayer/skin/pink.flag/jplayer.pink.flag.video.play.png",
         "bower_components/jplayer/skin/pink.flag/jplayer.pink.flag.seeking.gif",
         "bower_components/jplayer/add-on/jplayer.playlist.js"
+      ],
+      "findAndReplaceDOMText": [
+        "bower_components/findAndReplaceDOMText/src/findAndReplaceDOMText.js"
       ]
     }
   }
