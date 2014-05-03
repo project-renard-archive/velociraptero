@@ -39,6 +39,9 @@ define [ "backbone", "module", "jplayer.playlist", "findAndReplaceDOMText", "jqu
                                                    : (iframe.contentWindow ? iframe.contentWindow.document : iframe.document)`
               iframe_page_container = iframe_doc.getElementById('page-container')
 
+              # if page container exists, use that, otherwise just use the top
+              iframe_target = if iframe_page_container then iframe_page_container else iframe_doc
+
               cur_idx = myPlaylist.current
               # get text in tts_model
               find_str = tts_model.get('sentences')[cur_idx].text
@@ -46,14 +49,14 @@ define [ "backbone", "module", "jplayer.playlist", "findAndReplaceDOMText", "jqu
               console.log find_str
 
 
-              finder = window.findAndReplaceDOMText iframe_page_container,
+              finder = window.findAndReplaceDOMText iframe_target,
                 find: ///#{ find_str }///
                 wrap: $('<span class="highlight-tts" style="background-color: yellow; font-weight: bolder;">')[0]
                 #wrap: 'b'
               console.log finder
-              console.log $(iframe_page_container)
-              first_element = $(iframe_page_container).find('.highlight-tts').first()
+              console.log $(iframe_target)
+              first_element = $(iframe_target).find('.highlight-tts').first()
               console.log first_element
               if( first_element )
-                $( iframe_page_container ).scrollTo first_element
+                $( iframe_target ).scrollTo first_element
       @
