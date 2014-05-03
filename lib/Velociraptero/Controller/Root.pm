@@ -11,7 +11,7 @@ use Path::Class::URI;
 use URI::Escape;
 use List::UtilsBy qw(sort_by);
 use PDF::pdf2json;
-use Text::Unidecode;
+use Class::Unload;
 
 use Velociraptero::Util::PDFImage;
 use Velociraptero::Util::pdf2htmlEX;
@@ -393,7 +393,10 @@ sub get_phrase_tts {
 	my $sentence = $sentences->[ $self->param('phraseid') ];
 	my $text = $sentence->{text};
 
-	my $preproc = unidecode($text); # FIXME this is a sledgehammer approach
+        # for reload
+	Class::Unload->unload('Velociraptero::Util::TTS');
+	require Velociraptero::Util::TTS;
+	my $preproc = Velociraptero::Util::TTS->preprocess_for_tts( $text );
 
 	# TODO : this is blocking FIXME
 	my $mp3 = Velociraptero::Util::FestivalTTS->text_to_mp3($preproc);
