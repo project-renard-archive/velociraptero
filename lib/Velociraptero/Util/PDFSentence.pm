@@ -22,9 +22,11 @@ sub sentence_data {
 
 	my $prev_text = '';
 	for my $page (@$pdf_json) {
+		next unless $page->{text};
 		my $page_text = $page->{text};
 		my $prev_y = $page->{text}[0]{top};
 		for my $text_el (@$page_text) {
+			next unless $text_el->{data};
 
 			# if we are on a new line and the previous line did not end in a hyphen
 			# add a space
