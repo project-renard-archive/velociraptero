@@ -341,7 +341,7 @@ sub _get_pdfhtml_for_itemattachmentid {
 
 sub _get_sentence_data {
 	my ($self, $itemattachmentid) = @_;;
-	$self->cache->compute("sentence-$itemattachmentid", '1 year', sub {
+	$self->cache->compute("sentence-$itemattachmentid", '1 hour', sub {
 		my $filepath = $self->_get_filepath_from_itemattachmentid(  $itemattachmentid );
 		Velociraptero::Util::PDFSentence->sentence_data("$filepath");
 	});
