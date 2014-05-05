@@ -48,10 +48,12 @@ define [ "backbone", "module", "jplayer.playlist", "findAndReplaceDOMText", "jqu
               iframe = document.getElementsByClassName('file-view')[0]
               iframe_doc = `iframe.contentDocument ?  iframe.contentDocument
                                                    : (iframe.contentWindow ? iframe.contentWindow.document : iframe.document)`
-              iframe_page_container = iframe_doc.getElementById('page-container')
+              iframe_page_container = iframe_doc.getElementById('page-container') # pdf2htmlEX
+              iframe_page_viewer = iframe_doc.getElementById('viewerContainer') # pdf.js
 
               # if page container exists, use that, otherwise just use the top
-              iframe_target = if iframe_page_container then iframe_page_container else iframe_doc
+              console.log iframe_page_viewer
+              iframe_target = if iframe_page_container then iframe_page_container else if iframe_page_viewer then iframe_page_viewer else iframe_doc
 
 
               cur_idx = myPlaylist.current
@@ -70,7 +72,7 @@ define [ "backbone", "module", "jplayer.playlist", "findAndReplaceDOMText", "jqu
               try
                 finder = window.findAndReplaceDOMText iframe_target,
                   find: ///#{ find_str }///
-                  wrap: $('<span class="highlight-tts" style="background-color: yellow; font-weight: bolder;">')[0]
+                  wrap: $('<span class="highlight-tts" style="border-bottom:1px solid red; background-color: yellow; opacity: 0.25; font-weight: bolder;">')[0]
                   #wrap: 'b'
                 console.log finder
                 console.log $(iframe_target)
