@@ -29,3 +29,15 @@
 }
 
 #tooltip-tts h3, #tooltip-tts div { margin: 0; }
+
+.highlight-tts {
+  border-bottom:1px solid red; /* coloured underline */
+
+  /* highlighting works fine in pdf2htmlEX, but not in pdfjs
+   * because of the way the text layer is handled
+   */
+  background-color: yellow;
+  opacity: 0.25;
+
+  font-weight: bolder;
+}
