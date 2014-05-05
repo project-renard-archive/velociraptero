@@ -37,6 +37,7 @@ sub sentence_data {
 			# just at the beginning --- which is bad. Enough to
 			# make me rethink using pdf2json.)
 			$text_el->{data} =~ s/actionGoTo:\d+,//g;
+			$text_el->{data} =~ s/actionURI\([^)]\)//g;
 
 			$string .= $text_el->{data};
 			
