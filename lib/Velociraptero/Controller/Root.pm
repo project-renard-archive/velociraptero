@@ -32,10 +32,19 @@ sub index {
 	}) ); # JSON
 	my $pdfjs_url = $self->url_for('/vendor/zmughal-build-pdf.js/web/viewer.html');
 	my $pdf2htmlEX_url = $self->url_for('/api/pdf2htmlEX_render');
-	if( Velociraptero::Util::pdf2htmlEX->can_pdf2htmlEX ) {
-		$self->param( viewer_url => $pdf2htmlEX_url );
+	my $viewer_endpoint = {
+		pdfjs => $pdfjs_url,
+		pdf2htmlEX => $pdf2htmlEX_url,
+	};
+	if( $self->preferred_renderer ) {
+		$self->param( viewer_url =>
+			$viewer_endpoint->{$self->preferred_renderer} );
 	} else {
-		$self->param( viewer_url => $pdfjs_url );
+		if( Velociraptero::Util::pdf2htmlEX->can_pdf2htmlEX ) {
+			$self->param( viewer_url => $pdf2htmlEX_url );
+		} else {
+			$self->param( viewer_url => $pdfjs_url );
+		}
 	}
 	$self->param( attachmentview_config => j({
 		pdfjs_viewer_url => $pdfjs_url

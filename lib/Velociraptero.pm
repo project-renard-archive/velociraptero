@@ -19,6 +19,10 @@ sub startup {
 		$self->config->{chi};
 	});
 
+	$self->helper(preferred_renderer => sub {
+		$self->config->{renderer};
+	}) if exists $self->config->{renderer};
+
 
 	my $creatortypeid_author = $self->zotero->schema
 		->resultset('CreatorType')
