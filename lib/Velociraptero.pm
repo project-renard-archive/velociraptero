@@ -20,8 +20,8 @@ sub startup {
 	});
 
 	$self->helper(preferred_renderer => sub {
-		$self->config->{renderer};
-	}) if exists $self->config->{renderer};
+		$self->config->{renderer} // 'pdfjs';
+	});
 
 
 	my $creatortypeid_author = $self->zotero->schema
