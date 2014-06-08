@@ -20,7 +20,7 @@ sub startup {
 	});
 
 	$self->helper(preferred_renderer => sub {
-		$self->config->{renderer} // 'pdfjs';
+		$self->config->{renderer} // undef;
 	});
 
 
