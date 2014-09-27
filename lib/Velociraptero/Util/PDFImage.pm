@@ -101,7 +101,7 @@ method _pdf_to_png_mudraw (
 	Int :$page_number = 0,
 	Int :$density = 300,
 	) {
-
+	$page_number += 1; # mudraw is 1-based
 	my $fh = File::Temp->new( SUFFIX => '.png' );
 	my $cmd = [ "mudraw",
 		"-r", $density,
