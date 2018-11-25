@@ -101,11 +101,11 @@ sub item_attachments_TO_JSON {
 sub item_attachment_info {
 	my ($self, $item_attachment) = @_;
 	my $data = {
-		itemid => ( defined $item_attachment->sourceitemid
-			? $item_attachment->get_column('sourceitemid')
+		itemid => ( defined $item_attachment->parentitemid
+			? $item_attachment->get_column('parentitemid')
 			: $item_attachment->get_column('itemid') ),
 		attachment_itemid => $item_attachment->get_column('itemid'),
-		mimetype => $item_attachment->get_column('mimetype'),
+		mimetype => $item_attachment->get_column('contenttype'),
 		name => ($item_attachment->uri->path_segments)[-1],
 	};
 	if( $data->{itemid} == $data->{attachment_itemid} ) {
@@ -113,7 +113,7 @@ sub item_attachment_info {
 		$data->{title} = $data->{name};
 	} else {
 		# get title from title of sourceitem
-		my $item_info = $self->zotero_item_TO_JSON($item_attachment->sourceitemid);
+		my $item_info = $self->zotero_item_TO_JSON($item_attachment->parentitemid);
 		$data->{title} = defined $item_info->{title}
 			?  $item_info->{title}
 			: '-';
@@ -131,10 +131,10 @@ sub get_pdf_attachments {
 
 	if( $item->is_attachment ) {
 		my $item_attachment = $item->item_attachments_itemid;
-		@attachments = ( $item_attachment ) if $item_attachment->mimetype eq MIMETYPE_PDF;
+		@attachments = ( $item_attachment ) if $item_attachment->contenttype eq MIMETYPE_PDF;
 	} else {
-		@attachments = $item->stored_item_attachments_sourceitemids
-			->search( { mimetype => MIMETYPE_PDF } )->all ;
+		@attachments = $item->stored_item_attachments_parentitemids
+			->search( { contenttype => MIMETYPE_PDF } )->all ;
 	}
 	\@attachments;
 }
@@ -145,7 +145,7 @@ sub item_attachment_file {
 
 	my $item_attachment = $self->_get_itemattachmentid( $self->param('itemattachmentid') );
 	$self->render_file( filepath => $self->_get_filepath_from_itemattachmentid( $self->param('itemattachmentid') ),
-		format => $self->app->types->detect( $item_attachment->mimetype ) );
+		format => $self->app->types->detect( $item_attachment->contenttype ) );
 }
 
 sub _get_itemattachmentid {
@@ -195,7 +195,7 @@ sub zotero_item_get_authors {
 				"@{[$_->firstname]}"
 			}
 		}
-		map { $_->creatorid->creatordataid } # TODO separate by creatortypeid and put as a convenience method in
+		map { $_->creatorid } # TODO separate by creatortypeid and put as a convenience method in
 		$zotero_item->item_creators->search(
 			{ creatortypeid => $self->zotero_creatortypeid_author },
 			{ order_by => 'orderindex' } )->all ];
