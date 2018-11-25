@@ -222,11 +222,12 @@ sub collection {
 sub _get_toplevel_collections {
 	my ($self) = @_;
 	# TODO: maybe this can be cleaned up in Biblio::Zotero::DB itself
+	my $library = $self->zotero->schema->resultset('Library')->search( { type => 'user' } )->first;
 	my $get_top_level_collections = $self->zotero
 		->library
 		->collections
 		->search( {
-			libraryid => undef,
+			libraryid => $library->libraryid,
 			parentcollectionid => undef });
 }
 
