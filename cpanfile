@@ -23,3 +23,4 @@ requires 'String::Tagged';
 requires 'Lingua::EN::Sentence::Offsets';
 requires 'Text::Unidecode';
 requires 'Class::Unload';
+requires 'Alien::MuPDF';
